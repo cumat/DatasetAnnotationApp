@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <link rel="stylesheet" href="/styles/common.css">
+    <link id="theme-style" rel="stylesheet" href="/styles/colors-light.css">
+    <title></title>
+    <script type="module" src="/page.js"></script>
+
+</head>
+
+<body>
+    <navbar-comp title="Home"></navbar-comp>
+    <flex-container direction="row" alignitems="center" justify="center">
+        <home-button title="Annotate Dataset" description="This section allows you to annotate the dataset."
+            href="annotate">
+        </home-button>
+        <home-button title="Compare Annotations" description="This section allows you to compare annotations."
+            href="compare">
+        </home-button>
+    </flex-container>
+    <username-form id="id1" label="Name" buttontext="Start Annotation"></username-form>
+    <button id="theme-toggle">Toggle Theme</button>
+</body>
+<script type="module" src="/src/home.js"></script>
+
+</html>

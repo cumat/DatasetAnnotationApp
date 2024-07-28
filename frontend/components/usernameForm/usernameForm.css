@@ -1,0 +1,42 @@
+.username-form {
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.username-form-label {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--text-color);
+}
+
+.username-form-input {
+    border: none;
+    border-bottom: 1px solid #ccc;
+    padding: 5px;
+    width: 100%;
+    margin-bottom: 20px;
+    outline: none;
+    color: var(--text-color);
+    border-color: var(--secondary-color);
+    background-color: transparent;
+}
+
+.username-form-button {
+    display: block;
+    margin: 0 auto;
+    width: 190px;
+    border-radius: 10px;
+    border-width: 2px;
+    border-style: solid;
+    height: 45px;
+    font-size: large;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    color: var(--text-color);
+    border-color: var(--secondary-color);
+    background-color: var(--background-color);
+}
+
+.username-form-button:hover {
+    background-color: var(--secondary-color);
+}

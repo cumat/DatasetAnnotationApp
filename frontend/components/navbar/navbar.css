@@ -1,0 +1,24 @@
+.navbar {
+    padding: 10px 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    margin-bottom: 48px;
+    z-index: 1000;
+    color: var(--background-color);
+    background-color: var(--secondary-color);
+}
+
+.navbar-container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 20px;
+}
+
+.navbar-title {
+    cursor: default;
+}

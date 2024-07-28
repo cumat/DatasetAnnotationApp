@@ -1,0 +1,50 @@
+/* Outer container */
+.outer-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Link style reset */
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Inner divs */
+.home-button-container {
+    /* background-color: white;
+    border-color: #b0c2f8; */
+    background-color: var(--background-color);
+    border-color: var(--secondary-color);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 10px;
+    text-align: center;
+    border-style: solid;
+    border-width: 2px;
+    width: 400px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.home-button-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Title style */
+.home-button-title {
+    font-size: 24px;
+    margin-bottom: 10px;
+    /* color: #4d77f5; */
+    color: var(--text-color);
+}
+
+/* Description style */
+.home-button-description {
+    font-size: 14px;
+    /* color: #b0c2f8; */
+    color: var(--secondary-color);
+}
