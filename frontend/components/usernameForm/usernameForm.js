@@ -7,7 +7,7 @@ export class UsernameForm extends Component {
         super(homeButtonHtml, homeButtonCss);
     }
     setupHtml(node, attributes) {
-
+        let inputId = attributes.inputid || "username-form-input-id";
         const form = node.querySelector(".username-form");
         if (form) {
             form.addEventListener("submit", (event) => {
@@ -21,6 +21,7 @@ export class UsernameForm extends Component {
             label.addEventListener("click", () => {
                 console.log("clicked label");
             })
+            label.setAttribute("for", inputId);
         }
 
         if (attributes.buttontext) {
@@ -29,6 +30,7 @@ export class UsernameForm extends Component {
         }
         this.onSubmitCallback = null;
         this.input = node.querySelector(".username-form-input");
+        this.input.id = inputId;
     }
 
     #onSubmit(event) {

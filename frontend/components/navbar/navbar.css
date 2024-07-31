@@ -22,3 +22,25 @@
 .navbar-title {
     cursor: default;
 }
+
+.toggle-theme-button {
+    background-color: var(--button-background);
+    color: var(--button-color);
+    border: none;
+    border-radius: 50%;
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toggle-theme-button svg {
+    width: 24px;
+    height: 24px;
+}
+
+.toggle-theme-button .sun-and-moon {
+    fill: var(--button-color);
+    stroke: var(--button-color);
+}

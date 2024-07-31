@@ -5,6 +5,7 @@ body {
     height: 100%;
     background-color: var(--background-color);
     color: var(--text-color);
+    overflow: hidden;
 }
 
 body {
@@ -18,4 +19,16 @@ body {
 
 .hidden {
     display: none;
+}
+
+/* 
+add a root to the page to allow scrollable content, 
+while maintaining the body background color.
+*/
+#root {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: auto;
+    /* Allow scrolling within this div */
 }

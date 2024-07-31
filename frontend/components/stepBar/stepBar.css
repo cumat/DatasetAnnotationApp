@@ -1,0 +1,109 @@
+.step-bar-wrapper {
+    margin-top: 55px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+.step-bar-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    color: var(--primary-color);
+
+    @media (max-width: 768px) {
+        font-size: 12px;
+    }
+}
+
+.step-bar-item::before {
+    position: absolute;
+    content: "";
+    border-bottom: 2px solid var(--secondary-color);
+    width: 100%;
+    top: 20px;
+    left: -50%;
+    z-index: 2;
+}
+
+.step-bar-item::after {
+    position: absolute;
+    content: "";
+    border-bottom: 2px solid var(--secondary-color);
+    width: 100%;
+    top: 20px;
+    left: 50%;
+    z-index: 2;
+}
+
+.step-counter {
+    color: var(--background-color);
+}
+
+.step-counter:hover {
+    cursor: pointer;
+}
+
+.step-bar-item .step-counter {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--secondary-color);
+    margin-bottom: 6px;
+}
+
+.step-bar-item.active {
+    font-weight: bold;
+}
+
+.step-bar-item.active .step-counter {
+    font-weight: bold;
+    background-color: var(--primary-color);
+}
+
+.step-bar-item.active.completed .step-counter {
+    font-weight: bold;
+    background-color: #32862e;
+}
+
+.step-bar-item.active .step-counter:hover {
+    cursor: default;
+}
+
+.step-bar-item.completed .step-counter {
+    background-color: #67ff60;
+}
+
+/* .step-bar-item.completed::after {
+    position: absolute;
+    content: "";
+    border-bottom: 2px solid #67ff60;
+    width: 100%;
+    top: 20px;
+    left: 50%;
+    z-index: 3;
+} */
+
+.step-bar-item:first-child::before {
+    content: none;
+}
+
+.step-bar-item:last-child::after {
+    content: none;
+}
+
+.step-item-selected-border {
+    background-color: var(--primary-color);
+    width: 40px;
+    height: 5px;
+}
