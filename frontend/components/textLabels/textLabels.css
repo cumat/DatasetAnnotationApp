@@ -1,11 +1,11 @@
 .text-labels-container {
-    padding: 20px;
     display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
+    flex-direction: column;
+    flex-wrap: wrap;
     align-content: center;
-    justify-content: space-around;
+    justify-content: flex-start;
     align-items: center;
+    width: 100%;
 }
 
 .text-label {
@@ -24,4 +24,24 @@
 .text-label:hover {
     /* border: 2px solid var(--primary-color); */
     transform: translateY(-2px);
+}
+
+.text-label.selected {
+    transform: translateY(-2px);
+    background-color: var(--background-color);
+    border-color: var(--selected-color);
+    color: var(--selected-color);
+}
+
+.label-row {
+    /* margin-top: 30px; */
+    padding-top: 20px;
+    padding-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
 }

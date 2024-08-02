@@ -43,6 +43,7 @@
 
 .step-counter {
     color: var(--background-color);
+    user-select: none;
 }
 
 .step-counter:hover {
@@ -83,16 +84,6 @@
 .step-bar-item.completed .step-counter {
     background-color: #67ff60;
 }
-
-/* .step-bar-item.completed::after {
-    position: absolute;
-    content: "";
-    border-bottom: 2px solid #67ff60;
-    width: 100%;
-    top: 20px;
-    left: 50%;
-    z-index: 3;
-} */
 
 .step-bar-item:first-child::before {
     content: none;

@@ -63,6 +63,9 @@ def serve_page_js():
 def get_data_at(index):
     try:
         index = int(index)
+        # check if index is valid
+        if dataset.get_data_count() <= index:
+            return jsonify(None)
         data = dataset.get_data(index)
         res = {
             "dataset" : dataset.name,
@@ -71,7 +74,7 @@ def get_data_at(index):
             "labels" : data.labels.send_json(),
             "html" : data.view.content,
             "steps" : {
-                "count" : 3,
+                "count" : dataset.get_data_count(),
                 "completed" : []
             }
         }

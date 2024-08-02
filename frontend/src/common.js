@@ -31,3 +31,39 @@ export async function importHtml(url, onLoad) {
         console.error('Error loading external HTML:', error);
     }
 }
+
+export function redirect(path) {
+    window.location.href = path;
+}
+
+export function updateUrl(path) {
+    if (window.location.pathname !== path)
+        history.pushState({ path: path }, '', path);
+}
+
+export function getArg(name) {
+    // Get the query string from the URL
+    const queryString = window.location.search;
+
+    // Create a URLSearchParams object
+    const urlParams = new URLSearchParams(queryString);
+
+    // Get the value of the 'name' query parameter
+    return urlParams.get(name);
+}
+
+export function clearChildren(node) {
+    while (node.firstChild) {
+        node.removeChild(node.firstChild);
+    }
+}
+
+export function clamp(x, min = 0, max = Number.MAX_VALUE) {
+    if (x < min) {
+        return min;
+    }
+    else if (x > max) {
+        return max;
+    }
+    else return x;
+}

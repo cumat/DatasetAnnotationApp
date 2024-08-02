@@ -1,0 +1,44 @@
+.control-btn {
+    z-index: 100;
+    /* always on top */
+    position: fixed;
+    top: 50%;
+    /* Center-height */
+    transform: translateY(-50%);
+    /* Center the button vertically */
+    background-color: var(--secondary-color);
+    color: var(--background-color);
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+    height: 70px;
+    font-size: large;
+}
+
+.control-btn:hover {
+    background-color: var(--primary-color);
+}
+
+.next {
+    right: -15px;
+}
+
+.prev {
+    left: -15px;
+}
+
+.control-btn .arrow {
+    margin-right: 5px;
+
+}
+
+.control-btn .text {
+    display: none;
+}
+
+.control-btn:hover .text {
+    display: inline;
+}

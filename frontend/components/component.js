@@ -53,7 +53,7 @@ export class Component extends HTMLElement {
             // Set up the HTML and call afterHtml
             this.setupHtml(this, this.#getAttributes(), children);
             // replace the custom node with his children
-            replaceNodeWithChildren(this);
+            //replaceNodeWithChildren(this);
             // set is loaded to true
             this.isLoaded = true;
             // call on loaded callback

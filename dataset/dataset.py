@@ -42,7 +42,7 @@ class Data:
 class Dataset:
     def __init__(self, name: str, blank_labels : bool = True) -> None:
         self.name = name
-        self.dataset = {}
+        self.dataset = {}        
         self.dataset_order = []
         self.allow_blank_labels = blank_labels
     
@@ -51,6 +51,9 @@ class Dataset:
         self.dataset_order.append(data)
         return self
     
+    def get_data_count(self) :
+        return len(self.dataset)
+
     def get_data(self, index: int) -> Data:
         return self.dataset_order[index]
     
