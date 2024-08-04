@@ -155,6 +155,7 @@ export class StepBar extends Component {
     }
 
     setItems(stepsCount, completedSteps, activeIndex) {
+        this.onResize();
         this.#show(stepsCount, completedSteps, activeIndex);
     }
 }

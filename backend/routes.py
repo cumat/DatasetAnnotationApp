@@ -1,10 +1,13 @@
 from .app import App
-from flask import Blueprint, send_from_directory, jsonify, send_file, make_response
+from flask import Blueprint, send_from_directory, jsonify, send_file, make_response, request, redirect
 import os
+from backend.database import Answer, FinalAnswer, Database
 
 bp = Blueprint('routes',__name__)
 app = App.get_app()
+db = App.get_db()
 dataset = App.get_dataset()
+
 
 def send_page(filename):
     return send_from_directory(app.static_folder, f'pages/{filename}')
@@ -21,9 +24,16 @@ def main():
 def send_login_page():
     return send_page('login.html')
 
+@bp.route("/review/", defaults={'user': None})
+@bp.route('/annotate/<user>')
+def send_annotate_page_with_user(user):
+    if(user is None):
+        return redirect('/login')
+    return send_page('annotate.html')
+
 @bp.route('/annotate')
 def send_annotate_page():
-    return send_page('annotate.html')
+    return redirect('/login')
 
 # returns the file
 @bp.route('/<path:filename>')
@@ -59,28 +69,46 @@ def serve_page_js():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@bp.route('/dataset/<index>')
-def get_data_at(index):
+@bp.route('/dataset/<user>/<index>')
+def get_data_at(user, index):
     try:
         index = int(index)
         # check if index is valid
         if dataset.get_data_count() <= index:
             return jsonify(None)
         data = dataset.get_data(index)
+        answer = db.get_user_answer(user, dataset.name, data.id)
+        answers = db.get_user_answers_id(user, dataset.name)
+        print(answers)
         res = {
             "dataset" : dataset.name,
             "id" : data.id,
             "title" : data.title,
             "labels" : data.labels.send_json(),
             "html" : data.view.content,
+            "answer" : answer,
             "steps" : {
                 "count" : dataset.get_data_count(),
-                "completed" : []
+                "complete" : len(answers),
+                "completedSteps" : dataset.get_indices_from_ids(answers)
             }
         }
         return jsonify(res)
     except ValueError:
         return jsonify(None)
+
+@bp.route('/dataset/<user>', methods=['POST'])
+def save_dataset_label( user):
+    req= request.get_json()
+    print('saving dataset data: ', req)
+    db.insert_or_update_answer(Answer(user,dataset.name, req["id"], req["label"]))
+    return make_response('', 200)
+
+@bp.route('/dataset/name')
+def get_dataset_name():
+    return jsonify({
+        "dataset" : dataset.name
+    })
 
 # register routes to flask app
 def register_blueprint():

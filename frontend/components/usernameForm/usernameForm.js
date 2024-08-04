@@ -41,6 +41,9 @@ export class UsernameForm extends Component {
         }
     }
 
+    setStartingValue(value) {
+        this.input.value = value;
+    }
     setOnSubmitCallback(callback) {
         this.onSubmitCallback = callback;
     }

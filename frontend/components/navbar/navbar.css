@@ -23,6 +23,11 @@
     cursor: default;
 }
 
+.navbar-home-button {
+    color: var(--background-color);
+    margin-right: 10px;
+}
+
 .toggle-theme-button {
     background-color: var(--button-background);
     color: var(--button-color);
@@ -43,4 +48,17 @@
 .toggle-theme-button .sun-and-moon {
     fill: var(--button-color);
     stroke: var(--button-color);
+}
+
+.navbar-data-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.navbar-user-a {
+    text-decoration: none;
+    color: var(--button-background);
+    margin-right: 10px;
 }

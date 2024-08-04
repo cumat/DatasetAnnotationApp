@@ -54,6 +54,11 @@ class Dataset:
     def get_data_count(self) :
         return len(self.dataset)
 
+    def get_indices_from_ids(self, ids):
+        id_to_index = {str(data.id): idx for idx, data in enumerate(self.dataset_order)}
+        return [id_to_index.get(id[0], -1) for id in ids]
+
+
     def get_data(self, index: int) -> Data:
         return self.dataset_order[index]
     

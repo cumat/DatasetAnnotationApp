@@ -35,9 +35,12 @@ export class Navbar extends Component {
         super(navbarHtmlPath, navbarCssPath);
     }
     setupHtml(node, attributes) {
-        const title = node.querySelector(".navbar-title");
-        title.textContent = attributes.title;
-
+        this.navTitle = node.querySelector(".navbar-title");
+        this.navTitle.textContent = attributes.navtitle;
+        this.homeBtn = node.querySelector(".navbar-home-button");
+        if (attributes.showhome != undefined) {
+            this.homeBtn.classList.remove("hidden");
+        }
         const themeSelector = node.querySelector(".toggle-theme-button");
         setPreferredTheme();
         this.lightIcon = node.querySelector("#navbar-sun-svg");
@@ -48,7 +51,8 @@ export class Navbar extends Component {
             this.#updateThemeButton();
         });
         this.#updateThemeButton();
-
+        this.user = node.querySelector(".navbar-user");
+        this.userA = node.querySelector(".navbar-user-a");
     }
 
     #updateThemeButton() {
@@ -60,6 +64,13 @@ export class Navbar extends Component {
         else {
             this.lightIcon.classList.remove("hidden");
         }
+    }
+    setTitle(title) {
+        this.navTitle.textContent = title;
+    }
+    setUser(user) {
+        this.user.textContent = user;
+        this.userA.setAttribute("href", `/login?user=${user}`);
     }
 }
 

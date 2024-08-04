@@ -1,25 +1,21 @@
-// import { getComponentWithId } from "../components/component.js";
+import { getComponentWithId } from "../components/component.js";
+import { getArg, getPathParameterAt, redirect } from "./common.js";
 
-// // get the component by id
-// const x = getComponentWithId("id1");
 
-// console.log("component with id1", x);
-// x.addOnLoadListener(() => x.setOnSubmitCallback(onSubmit));
-// function onSubmit(value) {
-//     console.log("submitted value", value);
-// }
+const user = getArg("user");
 
-// function setTheme(theme) {
-//     const themeLink = document.getElementById('theme-style');
-//     themeLink.href = theme === 'dark' ? '/styles/colors-dark.css' : '/styles/colors-light.css';
-// }
+const form = getComponentWithId('user-form-id');
 
-// // Automatically set theme based on system preference
-// const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
-// setTheme(prefersDarkScheme ? 'dark' : 'light');
+form.addOnLoadListener(setupUserForm)
 
-// // Optional: Toggle theme based on user action
-// document.getElementById('theme-toggle').addEventListener('click', () => {
-//     const currentTheme = document.getElementById('theme-style').href.includes('dark') ? 'dark' : 'light';
-//     setTheme(currentTheme === 'dark' ? 'light' : 'dark');
-// });
+function login(username) {
+    console.log("login: ", username);
+    redirect(`/annotate/${username}`);
+}
+
+function setupUserForm() {
+    if (user) {
+        form.setStartingValue(user);
+    }
+    form.setOnSubmitCallback(login)
+}

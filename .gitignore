@@ -82,6 +82,7 @@ Thumbs.db
 *.log
 *.sql
 *.sqlite
+*.db
 
 # ignore compiled files
 *.com

@@ -52,10 +52,25 @@ export function getArg(name) {
     return urlParams.get(name);
 }
 
+export function getPathParameterAt(index) {
+    const path = window.location.pathname;
+    const segments = path.split('/');
+    segments.splice(0, 1); // remove host
+    if (index > segments.length - 1)
+        return null;
+    else
+        return segments[index];
+}
+
+
 export function clearChildren(node) {
     while (node.firstChild) {
         node.removeChild(node.firstChild);
     }
+}
+
+export function setPageTitle(title) {
+    document.title = title;
 }
 
 export function clamp(x, min = 0, max = Number.MAX_VALUE) {
