@@ -41,6 +41,13 @@ export class Navbar extends Component {
         if (attributes.showhome != undefined) {
             this.homeBtn.classList.remove("hidden");
         }
+        this.dwonloadButton = node.querySelector(".download-button");
+        this.dwonloadButton.addEventListener("click", () => {
+            this.#onDownload();
+        })
+        if (attributes.showdownload != undefined) {
+            this.dwonloadButton.classList.remove("hidden");
+        }
         const themeSelector = node.querySelector(".toggle-theme-button");
         setPreferredTheme();
         this.lightIcon = node.querySelector("#navbar-sun-svg");
@@ -54,7 +61,10 @@ export class Navbar extends Component {
         this.user = node.querySelector(".navbar-user");
         this.userA = node.querySelector(".navbar-user-a");
     }
-
+    #onDownload() {
+        if (this.onDownload)
+            this.onDownload();
+    }
     #updateThemeButton() {
         this.lightIcon.classList.add("hidden");
         this.darkIcon.classList.add("hidden");
@@ -71,6 +81,10 @@ export class Navbar extends Component {
     setUser(user) {
         this.user.textContent = user;
         this.userA.setAttribute("href", `/login?user=${user}`);
+    }
+
+    setOnDownloadListener(callback) {
+        this.onDownload = callback;
     }
 }
 

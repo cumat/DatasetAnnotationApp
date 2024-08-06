@@ -40,7 +40,7 @@ class App:
         else:
             raise Exception("App was already created")
 
-    def run(self) -> None:
+    def run(self, port) -> None:
         print("running: ", self.app)
-        self.app.run(debug=True)
+        self.app.run(debug=True, port=port)
 

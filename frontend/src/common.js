@@ -82,3 +82,39 @@ export function clamp(x, min = 0, max = Number.MAX_VALUE) {
     }
     else return x;
 }
+
+export function createDomElement(type, settings = {}) {
+    // Default settings
+    const defaultSettings = {
+        parent: null,
+        classList: [],
+        attributes: [],
+        textContent: null
+    };
+    // Merge default settings with provided settings
+    const { parent, classList, attributes, textContent } = { ...defaultSettings, ...settings };
+    // Create the element
+    const element = document.createElement(type);
+
+    // Add classes
+    if (classList.length > 0) {
+        element.classList.add(...classList);
+    }
+
+    // Set attributes
+    attributes.forEach(attr => {
+        const { name, value } = attr;
+        element.setAttribute(name, value);
+    });
+
+    if (textContent) {
+        element.textContent = textContent;
+    }
+
+    // Append to parent if provided
+    if (parent) {
+        parent.appendChild(element);
+    }
+
+    return element;
+}

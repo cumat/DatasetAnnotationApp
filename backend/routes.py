@@ -2,6 +2,7 @@ from .app import App
 from flask import Blueprint, send_from_directory, jsonify, send_file, make_response, request, redirect
 import os
 from backend.database import Answer, FinalAnswer, Database
+import json
 
 bp = Blueprint('routes',__name__)
 app = App.get_app()
@@ -34,6 +35,10 @@ def send_annotate_page_with_user(user):
 @bp.route('/annotate')
 def send_annotate_page():
     return redirect('/login')
+
+@bp.route('/compare')
+def send_compare_page() :
+    return send_page('compare.html')
 
 # returns the file
 @bp.route('/<path:filename>')
@@ -69,6 +74,26 @@ def serve_page_js():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+def find_uncompleted_indices(max_index, current_index, completed_indices):
+    # Convert completed indices to a set for faster lookup
+    completed_set = set(completed_indices)
+    
+    # Find the previous uncompleted index
+    prev_index = None
+    for i in range(current_index - 1, -1, -1):
+        if i not in completed_set:
+            prev_index = i
+            break
+    
+    # Find the next uncompleted index
+    next_index = None
+    for i in range(current_index + 1, max_index + 1):
+        if i not in completed_set:
+            next_index = i
+            break
+    
+    return prev_index, next_index
+
 @bp.route('/dataset/<user>/<index>')
 def get_data_at(user, index):
     try:
@@ -79,7 +104,9 @@ def get_data_at(user, index):
         data = dataset.get_data(index)
         answer = db.get_user_answer(user, dataset.name, data.id)
         answers = db.get_user_answers_id(user, dataset.name)
-        print(answers)
+        indices = dataset.get_indices_from_ids(answers)
+        prev, next = find_uncompleted_indices(dataset.get_data_count() - 1, index, indices)
+
         res = {
             "dataset" : dataset.name,
             "id" : data.id,
@@ -90,7 +117,9 @@ def get_data_at(user, index):
             "steps" : {
                 "count" : dataset.get_data_count(),
                 "complete" : len(answers),
-                "completedSteps" : dataset.get_indices_from_ids(answers)
+                "completedSteps" : indices,
+                "next" : next,
+                "prev" : prev
             }
         }
         return jsonify(res)
@@ -109,6 +138,41 @@ def get_dataset_name():
     return jsonify({
         "dataset" : dataset.name
     })
+
+@bp.route('/download/dataset/<user>')
+def download_user_results(user):
+    res = {}
+    res["user"] = user
+    res["dataset"] = dataset.name
+    answers = []
+    for id, label in db.get_user_answers(user, dataset.name):
+        if label != None:
+            answers.append({
+                "id" : id,
+                'label' : label})
+    if not dataset.allow_blank_labels and len(answers) != dataset.get_data_count():
+        return jsonify({
+            "msg" : "Complete all the dataset first",
+            "success" : False
+        })
+    res["answers"] = answers
+    directory = 'results'
+    file_name = f'{user}-results.json'
+    file_path = os.path.join(directory, file_name)
+    # Ensure the directory exists
+    os.makedirs(directory, exist_ok=True)
+
+    try:
+        with open(file_path, 'w') as f:
+            json.dump(res, f, indent=4)
+
+        return jsonify({
+        "msg" : "results downloaded successfully",
+        "success" : True
+    })
+    except:
+        return jsonify(None)
+    
 
 # register routes to flask app
 def register_blueprint():

@@ -9,6 +9,11 @@
     --background-color: #f5f5f5;
 
     --selected-color: #33bb3a;
+
+    --success-color: #33bb3a;
+    --success-color-hover: #207924;
+    --failure-color: #d32216;
+    --failure-color-hover: #851a13;
 }
 
 [data-theme="dark"] {
@@ -21,4 +26,8 @@
     --background-color: #1a1f2e;
     /* Example background color */
     --selected-color: #33bb3a;
+    --success-color: #33bb3a;
+    --success-color-hover: #207924;
+    --failure-color: #d32216;
+    --failure-color-hover: #851a13;
 }

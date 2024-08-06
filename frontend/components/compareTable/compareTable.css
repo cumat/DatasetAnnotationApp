@@ -1,0 +1,94 @@
+.results-table {
+    max-width: 1280px;
+    width: 100%;
+    padding: 10px;
+}
+
+tr {
+    border: solid 2px var(--secondary-color);
+    color: var(--text-color);
+}
+
+th {
+    border: solid 2px var(--secondary-color);
+    color: var(--text-color);
+}
+
+.percentage-bar {
+    background-color: var(--secondary-color);
+    height: 10px;
+    border-radius: 50px;
+    width: 50%;
+}
+
+.results-data-row {
+    border: solid 2px var(--secondary-color);
+}
+
+.results-title-data {
+    border: solid 2px var(--secondary-color);
+    cursor: pointer;
+    text-decoration-line: underline;
+    text-align: center;
+    color: var(--text-color);
+    max-width: 250px;
+    min-width: 250px;
+    width: 250px;
+    overflow-x: hidden;
+}
+
+.label-data {
+    white-space: nowrap;
+    min-width: 150px;
+}
+
+.percentage-bar-data {
+    width: 100%;
+}
+
+.percentage-text-data {
+    white-space: nowrap;
+}
+
+.pagination-btn {
+    height: 40px;
+    width: 40px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: 2px solid var(--secondary-color);
+    border-radius: 20px;
+    margin: 2px;
+}
+
+.pagination-btn:hover {
+    background-color: var(--secondary-color);
+}
+
+.pagination-control-btn {
+    background-color: var(--secondary-color);
+    color: var(--background-color);
+    border: 1px solid var(--primary-color);
+    border-radius: 20px;
+    margin: 2px;
+    height: 40px;
+    width: 40px;
+}
+
+.pagination-control-btn:hover {
+    background-color: var(--primary-color);
+}
+
+.pagination-control-btn.disabled {
+    background-color: gray;
+    border-color: gray;
+}
+
+.pagination-btn.selected {
+    background-color: #ecffe6;
+    border-color: #67ff60;
+    color: #00a01c;
+}
+
+.pagination-btn.selected:hover {
+    background-color: #67ff60;
+}

@@ -14,8 +14,9 @@
 
 <body>
     <div id="root">
-        <navbar-comp id="navbar" showhome></navbar-comp>
+        <navbar-comp id="navbar" showhome showdownload></navbar-comp>
         <step-bar id="step-bar"></step-bar>
+        <unanswered-controls id="unanswered-controls"></unanswered-controls>
         <annotate-control-buttons id="controls"></annotate-control-buttons>
         <div style="display: flex;flex-direction: column; flex: 1 1 auto; align-items: center; height: 100%;">
             <div style="flex: 1;">
@@ -27,6 +28,7 @@
 
             <labels-container id="labels"></labels-container>
         </div>
+        <snackbar-container id="snackbar"></snackbar-container>
     </div>
 </body>
 <script type="module" src="/src/annotate.js"></script>

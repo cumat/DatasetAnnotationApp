@@ -62,3 +62,24 @@
     color: var(--button-background);
     margin-right: 10px;
 }
+
+.download-button {
+    /* display: block;
+    margin: 0 auto;
+    margin-left: 20px;
+    border-radius: 10px;
+    background-color: var(--secondary-color); */
+    background-color: transparent;
+    color: var(--background-color);
+    font-size: 24px;
+    cursor: pointer;
+    border: none;
+    border-bottom: 2px solid var(--secondary-color);
+    /* border: 2px solid var(--primary-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4); */
+}
+
+.download-button:hover {
+    /* transform: scale(1.2); */
+    border-bottom: 2px solid var(--background-color);
+}

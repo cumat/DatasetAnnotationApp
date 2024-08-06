@@ -129,3 +129,5 @@ dist/
 htmlcov/
 .tox/
 docs/_build/
+
+results/*

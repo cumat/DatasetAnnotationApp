@@ -6,7 +6,7 @@ def get_dataset() -> Dataset:
     labels.add_label("label1").add_label("label2").add_label("label3")
     view = HtmlView()
     view.add_text("first data")
-    dataset = Dataset("test-dataset")
+    dataset = Dataset("test-dataset", blank_labels=False)
     for i in range(1, 10):
         data = Data(i, f"data {i}", view, labels)
         dataset.add_data(data)    

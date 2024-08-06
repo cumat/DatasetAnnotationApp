@@ -1,4 +1,4 @@
-import { getDatasetDataAt, getDatasetName, saveDatasetLabel } from "./requests";
+import { downloadUserResults, getDatasetDataAt, getDatasetName, saveDatasetLabel } from "./requests";
 import { getComponentWithId } from "../components/component.js";
 import { redirect, updateUrl, getArg, clamp, clearChildren, getPathParameterAt, setPageTitle } from "./common.js";
 
@@ -6,6 +6,8 @@ import { redirect, updateUrl, getArg, clamp, clearChildren, getPathParameterAt, 
 let user;
 let container;
 let currentData;
+const snackbar = getComponentWithId("snackbar");
+
 function goToIndex(stepIndex) {
     const currentIndex = Number(getArg("index")) ? clamp(Number(getArg("index")) - 1, 0) : 0;
     console.log("step selected: ", stepIndex);
@@ -57,10 +59,23 @@ async function fetchDataAt(index) {
             const onNext = index < res.steps.count - 1 ? () => goToIndex(index + 1) : null;
             controls.setCallbacks(onPrev, onNext);
         })
+
+        const unansweredControl = getComponentWithId("unanswered-controls");
+        unansweredControl.addOnLoadListener(() => {
+            const onPrev = res.steps.prev ? () => goToIndex(res.steps.prev) : null;
+            const onNext = res.steps.next ? () => goToIndex(res.steps.next) : null;
+            unansweredControl.setCallbacks(onPrev, onNext);
+        })
     }
     else {
         // handle error
-        //redirect('/')
+        if (index != 0) {
+            // redirect to the first question
+            redirect(`/annotate/${user}`);
+        }
+        else {
+            redirect('/login');
+        }
     }
 }
 
@@ -68,6 +83,19 @@ function loadData() {
     const currentIndex = Number(getArg("index")) ? clamp(Number(getArg("index")) - 1, 0) : 0;
     updateUrl(`/annotate/${user}?index=${(currentIndex + 1)}`);
     fetchDataAt(currentIndex);
+}
+
+function onDownloadRequested() {
+    downloadUserResults(user).then((res) => {
+        if (res != null) {
+            //alert(`Results available in ${res.path}`);
+            snackbar.createSnackbar(res.msg, res.success);
+        }
+        else {
+            //alert(`error when downloading`);
+            snackbar.createSnackbar(`an error occurred`, false);
+        }
+    });
 }
 
 function main() {
@@ -83,8 +111,10 @@ function main() {
         const datasetName = await getDatasetName();
         console.log("dataset name", datasetName);
         nav.setTitle(`Annotate ${datasetName}`);
+        nav.setOnDownloadListener(onDownloadRequested);
         setPageTitle(`Annotate ${datasetName}`);
     });
+
 
     container = getComponentWithId("content-container")
     container.addOnLoadListener(loadData);

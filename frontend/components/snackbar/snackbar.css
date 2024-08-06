@@ -1,0 +1,54 @@
+.snackbar-container {
+    position: fixed;
+    /* Fixes the container to the bottom of the viewport */
+    bottom: 0;
+    /* Aligns it to the bottom */
+    left: 0;
+    /* Aligns it to the left */
+    margin: 16px;
+    /* Adds margin around the container */
+    display: flex;
+    /* Uses flexbox to layout snackbar items */
+    flex-direction: column;
+    /* Aligns items in a column */
+    gap: 8px;
+    /* Adds space between items */
+    z-index: 9999;
+    /* Ensures the container is on top of other elements */
+}
+
+.snackbar-elem {
+    color: var(--text-color);
+    padding: 12px 24px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    font-size: 14px;
+    max-width: 300px;
+    width: 100%;
+    display: flex;
+    transition: opacity 0.3s ease-in-out;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.snackbar-btn {
+    border: none;
+    border-radius: 100%;
+    background-color: transparent;
+    color: var(--text-color);
+}
+
+.snackbar-btn:hover {
+    cursor: pointer;
+}
+
+.snackbar-elem.success {
+    background-color: var(--success-color);
+}
+
+.snackbar-elem.failure {
+    background-color: var(--failure-color);
+}
