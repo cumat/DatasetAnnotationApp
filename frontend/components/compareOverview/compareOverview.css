@@ -1,0 +1,18 @@
+.compare-element-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    padding: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border: 2px solid var(--primary-color);
+    margin: 5px;
+}
+
+.compare-element-container:hover {
+    background-color: var(--primary-color);
+    cursor: pointer;
+}

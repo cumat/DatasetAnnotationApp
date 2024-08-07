@@ -40,7 +40,6 @@ export class TextLabel {
         return this.button;
     }
 }
-customElements.define('text-label', TextLabel);
 export class TextLabels extends Component {
     constructor() {
         super(html, css);
@@ -146,13 +145,21 @@ export class TextLabels extends Component {
         }
     }
 
-    setSelectedLabel(label) {
-        this.currentAnswer = label;
-        this.#updateSelectedLabel(label);
-    }
-
     setOnSelectCallback(callback) {
         this.onSelect = callback;
+    }
+
+    setLabels(labelsData, answer, onSelectCallback) {
+        this.addOnLoadListener(() => {
+            this.setData(labelsData, answer);
+            this.setOnSelectCallback(onSelectCallback);
+        });
+    }
+    setSelectedLabel(label) {
+        this.addOnLoadListener(() => {
+            this.currentAnswer = label;
+            this.#updateSelectedLabel(label);
+        });
     }
 }
 

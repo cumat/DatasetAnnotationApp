@@ -19,6 +19,7 @@
     color: var(--background-color);
 
     margin: 10px;
+    cursor: pointer;
 }
 
 .text-label:hover {

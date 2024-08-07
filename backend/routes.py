@@ -4,6 +4,8 @@ import os
 from backend.database import Answer, FinalAnswer, Database
 import json
 
+from collections import Counter
+
 bp = Blueprint('routes',__name__)
 app = App.get_app()
 db = App.get_db()
@@ -173,6 +175,93 @@ def download_user_results(user):
     except:
         return jsonify(None)
     
+from backend.compare_results import get_dataset_results
+
+class LabelAnswerCompare:
+    def __init__(self, user_count) -> None:
+        self.answers = []
+        self.user_count = user_count
+        self.users = []
+
+    def add_answer(self, label, user):
+        self.answers.append(label)
+        self.users.append(user)
+                            
+    def return_dict(self) -> dict:
+        
+        counter = Counter(self.answers)        
+
+        return [
+            {
+                "label": string,
+                "count": count,
+                "percentage": count / self.user_count * 100  # Convert to percentage
+            }
+            for string, count in counter.items()
+        ]
+    
+    def return_dict_with_users(self) -> dict:
+        counter = Counter(self.answers)        
+
+        return [
+            {
+                "label": string,
+                "percentage": count / self.user_count * 100,  # Convert to percentage
+                "users" : self.users
+            }
+            for string, count in counter.items()
+        ]
+
+@bp.route('/results')
+def get_user_results():
+    answers = []
+    # gather answers from files
+    users_answers = get_dataset_results('results/.', dataset.name)
+    for d in dataset.get_dataset():
+        id = d.id
+        
+        compare = LabelAnswerCompare(len(users_answers))
+        
+        for ua in users_answers:
+            for answer in ua.answers:
+                if answer.id == str(id):
+                    compare.add_answer(answer.label, ua.user)
+                    break                    
+        answers.append({
+            "id" : id,
+            "title" : d.title,
+            "labels" : compare.return_dict(),
+            "fix" : None
+        })
+    return {
+        "answers" : answers
+    }
+
+@bp.route('/compare/<id>')
+def send_compare_at_page(id):
+    return send_page('compare_at.html')
+
+@bp.route('/compare-at/<id>')
+def send_compare_results(id):
+    # gather answers from files
+    users_answers = get_dataset_results('results/.', dataset.name)
+    data = dataset.get_data_by_id(id)
+    compare = LabelAnswerCompare(len(users_answers))
+        
+    for ua in users_answers:
+        for answer in ua.answers:
+            if answer.id == str(id):
+                compare.add_answer(answer.label, ua.user)
+                break        
+    return {
+        "dataset" : dataset.name,
+        "id" : data.id,
+        "title" : data.title,
+        "labels" : data.labels.send_json(),
+        "html" : data.view.content,
+        "fix" : None,
+        "answers" : compare.return_dict_with_users()
+    }
 
 # register routes to flask app
 def register_blueprint():

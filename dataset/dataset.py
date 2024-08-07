@@ -47,7 +47,7 @@ class Dataset:
         self.allow_blank_labels = blank_labels
     
     def add_data(self, data: Data):
-        self.dataset[data.id] = data
+        self.dataset[str(data.id)] = data
         self.dataset_order.append(data)
         return self
     
@@ -58,7 +58,10 @@ class Dataset:
         id_to_index = {str(data.id): idx for idx, data in enumerate(self.dataset_order)}
         return [id_to_index.get(id[0], -1) for id in ids]
 
-
+    def get_dataset(self) -> list[Data]:
+        return self.dataset_order
     def get_data(self, index: int) -> Data:
         return self.dataset_order[index]
+    def get_data_by_id(self, id: str) -> Data:
+        return self.dataset[id]
     

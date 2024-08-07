@@ -60,6 +60,14 @@ export class Navbar extends Component {
         this.#updateThemeButton();
         this.user = node.querySelector(".navbar-user");
         this.userA = node.querySelector(".navbar-user-a");
+
+        this.backButton = node.querySelector(".navbar-back-button");
+        this.backButton.addEventListener("click", () => {
+            history.back();
+        })
+        if (attributes.showback != undefined) {
+            this.backButton.classList.remove("hidden");
+        }
     }
     #onDownload() {
         if (this.onDownload)

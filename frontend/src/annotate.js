@@ -28,20 +28,29 @@ function onLabelSelected(label) {
     }
 }
 
+function setContent(title, html) {
+    const t = document.querySelector("#data-title");
+    t.textContent = title;
+    const content = document.querySelector("#data-content");
+    content.innerHTML = html;
+}
+
+function createLabels(labels, answer, container, onLabelSelected) {
+    const comp = document.createElement(labels.component);
+    comp.setLabels(labels.data, answer, onLabelSelected);
+    container.addOnLoadListener(() => {
+        container.setChild(comp);
+    });
+}
+
 async function fetchDataAt(index) {
     const res = await getDatasetDataAt(user, index);
     if (res) {
         console.log("data at ", index, res);
         currentData = res;
-        const title = document.querySelector("#data-title");
-        title.textContent = res.title;
-        const content = document.querySelector("#data-content");
-        content.innerHTML = res.html;
-        const comp = document.createElement(res.labels.component);
-        comp.addOnLoadListener(() => {
-            comp.setData(res.labels.data, res.answer);
-            comp.setOnSelectCallback(onLabelSelected);
-        })
+
+        setContent(res.title, res.html);
+
         const stepBar = getComponentWithId("step-bar");
         stepBar.addOnLoadListener(() => {
             stepBar.setItems(res.steps.count, res.steps.completedSteps, index);
@@ -49,9 +58,7 @@ async function fetchDataAt(index) {
         });
 
         const labels = getComponentWithId("labels");
-        labels.addOnLoadListener(() => {
-            labels.setChild(comp);
-        });
+        createLabels(res.labels, res.answer, labels, onLabelSelected);
 
         const controls = getComponentWithId("controls");
         controls.addOnLoadListener(() => {

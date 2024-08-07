@@ -11,9 +11,9 @@ export class AnswerData {
 }
 
 export class TableData {
-    constructor(title, answers) {
+    constructor(title, labels) {
         this.title = title;
-        this.answers = answers;
+        this.labels = labels;
     }
 }
 
@@ -23,17 +23,27 @@ class TableDataRow {
         this.title = createDomElement("td", { parent: this.tr, classList: ["results-title-data"] });
         const tdData = createDomElement("td", { parent: this.tr, classList: ["results-data-row"] });
         this.table = createDomElement("table", { parent: tdData });
+        this.title.addEventListener("click", () => {
+            this.#onClick();
+        });
     }
 
-    setData(data) {
+    #onClick() {
+        if (this.onElementClick) {
+            this.onElementClick();
+        }
+    }
+
+    setData(data, onClick) {
         clearChildren(this.table);
         this.title.textContent = data.title;
-        data.answers.forEach(answer => {
+        this.onElementClick = onClick;
+        data.labels.forEach(answer => {
             const row = createDomElement("tr", { parent: this.table });
             createDomElement("td", { parent: row, textContent: answer.label, classList: ["label-data"] });
             const percentageBar = createDomElement("td", { parent: row, classList: ["percentage-bar-data"] });
-            createDomElement("div", { parent: percentageBar, classList: ["percentage-bar"], attributes: [{ name: "style", value: (`width: ${answer.percentage * 100}%`) }] })
-            createDomElement("td", { parent: row, textContent: answer.percentage, classList: ["percentage-text-data"] });
+            createDomElement("div", { parent: percentageBar, classList: ["percentage-bar"], attributes: [{ name: "style", value: (`width: ${answer.percentage}%`) }] })
+            createDomElement("td", { parent: row, textContent: answer.percentage + "%", classList: ["percentage-text-data"] });
         });
     }
 
@@ -41,21 +51,6 @@ class TableDataRow {
         return this.tr;
     }
 }
-
-function createDataRow(data, container) {
-    const tr = createDomElement("tr", { parent: container });
-    createDomElement("td", { parent: tr, textContent: data.title, classList: ["results-title-data"] });
-    const tdData = createDomElement("td", { parent: tr, classList: ["results-data-row"] });
-    const table = createDomElement("table", { parent: tdData });
-    data.answers.forEach(answer => {
-        const row = createDomElement("tr", { parent: table });
-        createDomElement("td", { parent: row, textContent: answer.label, classList: ["label-data"] });
-        const percentageBar = createDomElement("td", { parent: row, classList: ["percentage-bar-data"] });
-        createDomElement("div", { parent: percentageBar, classList: ["percentage-bar"], attributes: [{ name: "style", value: (`width: ${answer.percentage * 100}%`) }] })
-        createDomElement("td", { parent: row, textContent: answer.percentage, classList: ["percentage-text-data"] });
-    });
-}
-
 export class CompareTable extends Component {
     constructor() {
         super(html, css);
@@ -77,6 +72,12 @@ export class CompareTable extends Component {
         this.maxPages = 1;
         for (let index = 0; index < this.elementsPerPage; index++) {
             this.dataRows.push(new TableDataRow());
+        }
+    }
+
+    #onElementClick(id) {
+        if (this.onElemClick) {
+            this.onElemClick(id);
         }
     }
 
@@ -123,7 +124,7 @@ export class CompareTable extends Component {
         this.#setupPagination(pages, currentPage);
 
         const startingIndex = (currentPage - 1) * this.elementsPerPage;
-        const endingIndex = startingIndex + this.elementsPerPage;
+        const endingIndex = clamp(startingIndex + this.elementsPerPage, 0, elements);
 
 
 
@@ -132,11 +133,14 @@ export class CompareTable extends Component {
         for (let index = startingIndex; index < endingIndex; index++) {
             const d = data[index];
             const row = this.dataRows[index - startingIndex];
-            row.setData(d);
+            row.setData(d, () => {
+                this.#onElementClick(d.id);
+            });
             this.table.appendChild(row.getRoot());
         }
     }
-    setData(data, currentPage = 1) {
+    setData(data, onElemClick, currentPage = 1) {
+        this.onElemClick = onElemClick;
         this.currentData = data;
         this.currentPage = currentPage;
         this.maxPages = data.length / this.elementsPerPage;
@@ -152,7 +156,7 @@ export class CompareTable extends Component {
         if (page == 1) {
             this.prev.classList.add("disabled");
         }
-        else if (page == this.maxPages) {
+        if (page == this.maxPages) {
             this.next.classList.add("disabled");
         }
     }

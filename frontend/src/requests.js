@@ -56,3 +56,35 @@ export async function downloadUserResults(user) {
         throw error;  // Re-throw the error to allow handling it where the function is called
     }
 }
+
+export async function getCompareResults() {
+    try {
+        const response = await fetch(`/results`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        // return result
+        return data;
+    }
+    catch (error) {
+        console.error('Fetching data failed:', error);
+        throw error;  // Re-throw the error to allow handling it where the function is called
+    }
+}
+
+export async function getCompareAt(id) {
+    try {
+        const response = await fetch(`/compare-at/${id}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        // return result
+        return data;
+    }
+    catch (error) {
+        console.error('Fetching data failed:', error);
+        throw error;  // Re-throw the error to allow handling it where the function is called
+    }
+}
