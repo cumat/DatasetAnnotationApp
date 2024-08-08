@@ -15,7 +15,10 @@ class LabelGroup:
     def __init__(self) -> None:
         pass
 
-    def send_json(seld) -> str:
+    def send_json(self) -> str:
+        pass
+
+    def compare(self, data1, data2) -> bool:
         pass
 
 class TextLabelGroup(LabelGroup):
@@ -31,6 +34,11 @@ class TextLabelGroup(LabelGroup):
             "component":"text-labels",
             "data": self.labels
         }
+    def compare(self, data1, data2) -> bool:
+        if(data1 == data2):
+            return True
+        else:
+            return False
 
 class Data:
     def __init__(self, id: str, title: str, view : HtmlView, labels : LabelGroup) -> None:

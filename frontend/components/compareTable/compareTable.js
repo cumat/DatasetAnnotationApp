@@ -38,6 +38,17 @@ class TableDataRow {
         clearChildren(this.table);
         this.title.textContent = data.title;
         this.onElementClick = onClick;
+        // add fix if present
+        if (data.fix) {
+            const row = createDomElement("tr", { parent: this.table });
+            createDomElement("td", { parent: row, textContent: `fix: ${data.fix}`, classList: ["fix-data"] });
+        }
+        // check if there is a conflict
+        else if (data.labels.length > 1) {
+            const row = createDomElement("tr", { parent: this.table });
+            createDomElement("td", { parent: row, textContent: `conflict`, classList: ["conflict-data"] });
+        }
+        // add labels
         data.labels.forEach(answer => {
             const row = createDomElement("tr", { parent: this.table });
             createDomElement("td", { parent: row, textContent: answer.label, classList: ["label-data"] });
@@ -45,6 +56,7 @@ class TableDataRow {
             createDomElement("div", { parent: percentageBar, classList: ["percentage-bar"], attributes: [{ name: "style", value: (`width: ${answer.percentage}%`) }] })
             createDomElement("td", { parent: row, textContent: answer.percentage + "%", classList: ["percentage-text-data"] });
         });
+
     }
 
     getRoot() {
@@ -126,8 +138,6 @@ export class CompareTable extends Component {
         const startingIndex = (currentPage - 1) * this.elementsPerPage;
         const endingIndex = clamp(startingIndex + this.elementsPerPage, 0, elements);
 
-
-
         clearChildren(this.table);
         this.table.appendChild(this.header);
         for (let index = startingIndex; index < endingIndex; index++) {
@@ -143,7 +153,7 @@ export class CompareTable extends Component {
         this.onElemClick = onElemClick;
         this.currentData = data;
         this.currentPage = currentPage;
-        this.maxPages = data.length / this.elementsPerPage;
+        this.maxPages = Math.ceil(data.length / this.elementsPerPage);
         this.#show();
         this.#updateControls();
     }

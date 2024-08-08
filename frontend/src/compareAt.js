@@ -1,6 +1,6 @@
 import { getComponentWithId } from "../components/component";
 import { getArg, getPathParameterAt, setPageTitle } from "./common";
-import { getCompareAt, getDatasetName } from "./requests";
+import { getCompareAt, getDatasetName, saveDatasetFix } from "./requests";
 
 
 const id = getPathParameterAt(1);
@@ -22,7 +22,7 @@ function createLabels(labels, answer, container, onLabelSelected) {
 }
 
 function onLabelSelected(label) {
-    console.log("selected label: ", label);
+    saveDatasetFix(id, label);
 }
 
 async function main() {

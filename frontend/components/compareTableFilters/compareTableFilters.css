@@ -1,0 +1,66 @@
+.filters-container {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    align-content: center;
+    justify-content: flex-end;
+    align-items: center;
+    max-width: 1280px;
+    width: 100%;
+    margin: 10px;
+}
+
+.filter-button {
+    margin: 10px;
+    min-width: 100px;
+    min-height: 30px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.conflict {
+    background-color: var(--background-color);
+    border: 2px solid var(--warning-color);
+    color: var(--text-color);
+}
+
+.conflict:hover {
+    background-color: var(--warning-color);
+}
+
+.conflict.selected {
+    background-color: var(--warning-color);
+    transform: translateY(-2px);
+}
+
+
+.fixes {
+    background-color: var(--background-color);
+    border: 2px solid var(--success-color);
+    color: var(--text-color);
+}
+
+.fixes:hover {
+    background-color: var(--success-color);
+}
+
+.fixes.selected {
+    background-color: var(--success-color);
+    transform: translateY(-2px);
+}
+
+.unanswered {
+    background-color: var(--background-color);
+    border: 2px solid var(--primary-color);
+    color: var(--text-color);
+}
+
+.unanswered:hover {
+    background-color: var(--primary-color);
+}
+
+.unanswered.selected {
+    background-color: var(--primary-color);
+    transform: translateY(-2px);
+}

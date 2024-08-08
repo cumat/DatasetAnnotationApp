@@ -4,6 +4,8 @@ import os
 from backend.database import Answer, FinalAnswer, Database
 import json
 
+from dataset.dataset import LabelGroup
+from backend.agreement import fleiss_kappa, cohen_kappa, kappa_to_text
 from collections import Counter
 
 bp = Blueprint('routes',__name__)
@@ -177,39 +179,84 @@ def download_user_results(user):
     
 from backend.compare_results import get_dataset_results
 
+class LabelIndexCounter:
+    def __init__(self) -> None:
+        self.current_index = 0
+        self.labels_map = {}
+    
+    def add_label(self, label):
+        if label not in self.labels_map:
+            self.labels_map[label] = self.current_index + 1
+            self.current_index += 1
+    def get_count(self):
+        return self.current_index + 1
+    def get_index(self, label):
+        return self.labels_map[label]
+
 class LabelAnswerCompare:
-    def __init__(self, user_count) -> None:
+    def __init__(self, user_count : int, label_group: LabelGroup) -> None:
         self.answers = []
         self.user_count = user_count
-        self.users = []
+        self.users = {}
+        self.label_group = label_group
 
     def add_answer(self, label, user):
         self.answers.append(label)
-        self.users.append(user)
-                            
-    def return_dict(self) -> dict:
-        
-        counter = Counter(self.answers)        
+        if label not in self.users:
+            self.users[label] = []        
+        self.users[label].append(user)
+    
+    def get_counter(self):
+        counted_answers = []
+        for answer in self.answers:
+            found = False
+            for c in counted_answers:
+                if self.label_group.compare(answer, c["label"]):
+                    c["count"] += 1
+                    found = True
+                    break
+            if not found:
+                # add the new answer
+                counted_answers.append({
+                    "label" : answer,
+                    "count" : 1
+                })
+        return counted_answers
+    
+    def get_agreement_row(self, label_indexer : LabelIndexCounter) -> list:
+        counted_answers = self.get_counter()
+        res = []
+        # create a row of 0s
+        for _ in range(0, label_indexer.get_count()):
+            res.append(0)
+        for c in counted_answers:
+            index = label_indexer.get_index(c["label"])
+            res[index] = c["count"]
+        return res
 
+    def return_dict(self) -> dict:        
+        #counter = Counter(self.answers)
+        counted_answers = self.get_counter()
         return [
             {
-                "label": string,
-                "count": count,
-                "percentage": count / self.user_count * 100  # Convert to percentage
+                "label": c["label"],
+                "count": c["count"],
+                "percentage": c["count"] / self.user_count * 100  # Convert to percentage
             }
-            for string, count in counter.items()
+            for c in counted_answers
         ]
     
     def return_dict_with_users(self) -> dict:
-        counter = Counter(self.answers)        
+        #counter = Counter(self.answers)        
+        counted_answers = self.get_counter()
 
         return [
             {
-                "label": string,
-                "percentage": count / self.user_count * 100,  # Convert to percentage
-                "users" : self.users
+                "label":  c["label"],
+                "percentage": c["count"]  / self.user_count * 100,  # Convert to percentage
+                "users" : self.users[c["label"]]
             }
-            for string, count in counter.items()
+            for c in counted_answers
         ]
 
 @bp.route('/results')
@@ -220,18 +267,19 @@ def get_user_results():
     for d in dataset.get_dataset():
         id = d.id
         
-        compare = LabelAnswerCompare(len(users_answers))
+        compare = LabelAnswerCompare(len(users_answers), d.labels)
         
         for ua in users_answers:
             for answer in ua.answers:
                 if answer.id == str(id):
                     compare.add_answer(answer.label, ua.user)
-                    break                    
+                    break
+                            
         answers.append({
             "id" : id,
             "title" : d.title,
             "labels" : compare.return_dict(),
-            "fix" : None
+            "fix" : db.get_fix(dataset.name, id)
         })
     return {
         "answers" : answers
@@ -246,7 +294,7 @@ def send_compare_results(id):
     # gather answers from files
     users_answers = get_dataset_results('results/.', dataset.name)
     data = dataset.get_data_by_id(id)
-    compare = LabelAnswerCompare(len(users_answers))
+    compare = LabelAnswerCompare(len(users_answers), data.labels)
         
     for ua in users_answers:
         for answer in ua.answers:
@@ -259,9 +307,61 @@ def send_compare_results(id):
         "title" : data.title,
         "labels" : data.labels.send_json(),
         "html" : data.view.content,
-        "fix" : None,
+        "fix" : db.get_fix(dataset.name, id),
         "answers" : compare.return_dict_with_users()
     }
+
+@bp.route('/dataset/fix', methods=['POST'])
+def save_dataset_fix():
+    req = request.get_json()
+    db.insert_or_update_final_answer(FinalAnswer(dataset.name, req["id"], req["label"]))
+    return make_response('', 200)
+@bp.route('/dataset/agreement')
+def get_agreement_kappa():
+    users_answers = get_dataset_results('results/.', dataset.name)
+    user_count = len(users_answers)
+    # no agreement, only one user
+    if(user_count <= 1):
+        return
+    compared_labels = []
+    label_indexer = LabelIndexCounter()
+    for d in dataset.get_dataset():
+        id = d.id
+        
+        compare = LabelAnswerCompare(len(users_answers), d.labels)
+        
+        for ua in users_answers:
+            for answer in ua.answers:
+                if answer.id == str(id):
+                    compare.add_answer(answer.label, ua.user)
+                    label_indexer.add_label(answer.label)
+                    break
+        compared_labels.append(compare)
+    
+    # create matrix
+    matrix = []
+    for c in compared_labels:
+        matrix.append(c.get_agreement_row(label_indexer))
+    print(matrix)
+
+    # if there are 2 users
+    # use cohen
+    if user_count == 2:
+        k = cohen_kappa(matrix[0], matrix[1])
+        k_str = "%.2f"%k
+        k = fleiss_kappa(matrix)
+        k_str = "%.2f"%k
+        return jsonify({
+            'agreement' : f'{kappa_to_text(k)}',
+            'details' : f'Cohen {k_str}'
+        })
+    else:
+        k = fleiss_kappa(matrix)
+        k_str = "%.2f"%k
+        return jsonify({
+            'agreement' : f'{kappa_to_text(k)}',
+            'details' : f'Fleiss {k_str}'
+        })
 
 # register routes to flask app
 def register_blueprint():

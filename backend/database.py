@@ -97,10 +97,35 @@ class Database:
             conn = sqlite3.connect(self.db_name)
             cur = conn.cursor()
             cur.execute('''
-                INSERT OR REPLACE INTO fixedAnswers (dataset, id, label) VALUES (?, ?, ?)
+                INSERT OR REPLACE INTO finalAnswers (dataset, id, label) VALUES (?, ?, ?)
             ''', (answer.dataset, answer.id, answer.label))
             conn.commit()
             cur.close()
             conn.close()
         except sqlite3.IntegrityError as e:
             print(f"IntegrityError: {e}")
+    
+    def get_fixes(self, dataset) :
+        conn = sqlite3.connect(self.db_name)
+        cur = conn.cursor()
+        cur.execute('''
+            SELECT id, label FROM finalAnswers WHERE dataset = ?
+        ''', (dataset))
+        res = cur.fetchall()
+        cur.close()
+        conn.close()
+        return res
+    
+    def get_fix(self, dataset, id):
+        conn = sqlite3.connect(self.db_name)
+        cur = conn.cursor()
+        cur.execute('''
+            SELECT label FROM finalAnswers WHERE dataset = ? AND id = ?
+        ''', (dataset, id))
+        res = cur.fetchall()
+        cur.close()
+        conn.close()
+        if res is None or len(res) == 0:
+            return None
+        else:
+            return res[0][0]

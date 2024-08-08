@@ -42,6 +42,18 @@ th {
     min-width: 150px;
 }
 
+.fix-data {
+    color: var(--selected-color);
+    white-space: nowrap;
+    min-width: 150px;
+}
+
+.conflict-data {
+    color: var(--warning-color);
+    white-space: nowrap;
+    min-width: 150px;
+}
+
 .percentage-bar-data {
     width: 100%;
 }
