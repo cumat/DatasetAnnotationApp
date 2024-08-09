@@ -1,4 +1,4 @@
-
+from dataset.labels import TextLabelGroup, NumberLabelGroup, ImageLabelGroup, TimestampLabelGroup, LabelGroup, NumberValueType
 class HtmlView:
     def __init__(self) -> None:
         self.content = ""
@@ -10,35 +10,22 @@ class HtmlView:
     def add_text(self, text):
         self.content += f"<p>{text}</p>"
         return self
-
-class LabelGroup:
-    def __init__(self) -> None:
-        pass
-
-    def send_json(self) -> str:
-        pass
-
-    def compare(self, data1, data2) -> bool:
-        pass
-
-class TextLabelGroup(LabelGroup):
-    def __init__(self) -> None:
-        self.labels = []
-
-    def add_label(self, label: str):
-        self.labels.append(label)
-        return self
-
-    def send_json(self) -> str:
-        return {
-            "component":"text-labels",
-            "data": self.labels
-        }
-    def compare(self, data1, data2) -> bool:
-        if(data1 == data2):
-            return True
+    def add_img(self, source : str, id: str | None):
+        if id:
+            self.content += (f'<img id={id} src="{source}" width="500">')
         else:
-            return False
+            self.content += (f'<img src="{source}" width="500">')
+        return self
+    def add_external_html(self, source_path:str):
+        try:
+            with open(source_path, 'r') as file:
+                content = file.read()
+                self.content += ('\n' + content + '\n')
+            return self
+        except Exception as e:
+            self.content += (f'\nError loading {source_path}, {e}\n')
+            return self
+
 
 class Data:
     def __init__(self, id: str, title: str, view : HtmlView, labels : LabelGroup) -> None:

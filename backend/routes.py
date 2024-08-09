@@ -52,7 +52,12 @@ def get(filename):
         filename = f"{filename}.js"
     return send_file(filename)
 
-# returns a page.js file that imports all components
+# returns an external file
+@bp.route('/res/<path:filename>')
+def get_res(filename):
+    return send_from_directory('.', f'{filename}')
+
+#returns a page.js file that imports all components
 @bp.route('/page.js')
 def serve_page_js():
     components_dir = os.path.join(app.static_folder, 'components')
@@ -322,7 +327,7 @@ def get_agreement_kappa():
     user_count = len(users_answers)
     # no agreement, only one user
     if(user_count <= 1):
-        return
+        return jsonify(None)
     compared_labels = []
     label_indexer = LabelIndexCounter()
     for d in dataset.get_dataset():

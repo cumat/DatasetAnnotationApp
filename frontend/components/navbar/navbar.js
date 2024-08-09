@@ -3,6 +3,10 @@ const navbarCssPath = "/components/navbar/navbar.css";
 const navbarHtmlPath = "/components/navbar/navbar.html";
 
 function getPreferredTheme() {
+    const t = localStorage.getItem("preferred-theme");
+    if (t) {
+        return t;
+    }
     // get theme based on system preference
     const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
 
@@ -16,6 +20,7 @@ function getCurrentTheme() {
 function setPreferredTheme(theme = null) {
     if (theme) {
         document.body.setAttribute('data-theme', theme);
+        localStorage.setItem("preferred-theme", theme);
     }
     else {
         document.body.setAttribute('data-theme', getPreferredTheme());
