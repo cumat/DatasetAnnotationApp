@@ -20,7 +20,7 @@ function replaceNodeWithChildren(node) {
 
 //const components = new Map();
 
-export function getComponentWithId(id) {
+export function getComponentById(id) {
     return document.getElementById(id);
 }
 

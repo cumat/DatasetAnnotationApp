@@ -21,7 +21,7 @@ def dataset_test() -> Dataset:
 
     view = HtmlView()
     view.add_text("first data")
-    dataset = Dataset("test-dataset-1", blank_labels=False)
+    dataset = Dataset("test-dataset-1")
     dataset.add_data(Data("1", "text labels", view, labels))
     dataset.add_data(Data("2", "float labels", view, float_labels))
     dataset.add_data(Data("3", "int labels", view, int_labels))
@@ -39,3 +39,14 @@ def dataset_test() -> Dataset:
 
 def get_dataset() -> Dataset:
     return dataset_test()
+
+from dataset.dataset_results import DatasetResults, DatasetDataResult
+
+from dataset.dataset_download_helper import download_as_json
+
+def save_dataset(results: DatasetResults) -> None:
+    print(
+        "saving dataset results" , results.dataset
+    )
+    download_as_json(results)
+    

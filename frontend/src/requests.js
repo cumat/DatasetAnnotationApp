@@ -59,7 +59,7 @@ export async function downloadUserResults(user) {
 
 export async function getCompareResults() {
     try {
-        const response = await fetch(`/results`);
+        const response = await fetch(`/dataset/results`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -75,7 +75,7 @@ export async function getCompareResults() {
 
 export async function getCompareAt(id) {
     try {
-        const response = await fetch(`/compare-at/${id}`);
+        const response = await fetch(`/dataset/at/${id}`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -105,6 +105,22 @@ export async function saveDatasetFix(id, label) {
 export async function getAgreementText() {
     try {
         const response = await fetch(`/dataset/agreement`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        // return result
+        return data;
+    }
+    catch (error) {
+        console.error('Fetching data failed:', error);
+        throw error;  // Re-throw the error to allow handling it where the function is called
+    }
+}
+
+export async function downloadDatasetResults() {
+    try {
+        const response = await fetch(`/download/dataset`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }

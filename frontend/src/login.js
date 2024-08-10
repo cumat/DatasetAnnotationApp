@@ -1,10 +1,10 @@
-import { getComponentWithId } from "../components/component.js";
+import { getComponentById } from "../components/component.js";
 import { getArg, getPathParameterAt, redirect } from "./common.js";
 
 
 const user = getArg("user");
 
-const form = getComponentWithId('user-form-id');
+const form = getComponentById('user-form-id');
 
 form.addOnLoadListener(setupUserForm)
 

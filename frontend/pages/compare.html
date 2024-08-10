@@ -14,7 +14,7 @@
 
 <body>
     <div id="root">
-        <navbar-comp navtitle="Compare" showhome></navbar-comp>
+        <navbar-comp id="navbar" navtitle="Compare" showhome showdownload></navbar-comp>
         <flex-container direction="column" alignitems="center" justify="center">
             <h2 id="dataset-title"></h2>
             <div style="display: flex;
@@ -30,7 +30,7 @@
             </div>
         </flex-container>
 
-
+        <snackbar-container id="snackbar"></snackbar-container>
         <compare-table id="compare"></compare-table>
     </div>
 </body>

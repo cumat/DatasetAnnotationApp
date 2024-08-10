@@ -1,7 +1,7 @@
-import { getComponentWithId } from "../components/component.js";
+import { getComponentById } from "../components/component.js";
 
 // get the username form
-const userForm = getComponentWithId("user-form-id");
+const userForm = getComponentById("user-form-id");
 
 userForm.addOnLoadListener(() => userForm.setOnSubmitCallback(onSubmit));
 

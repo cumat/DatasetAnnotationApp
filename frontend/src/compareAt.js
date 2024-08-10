@@ -1,4 +1,4 @@
-import { getComponentWithId } from "../components/component";
+import { getComponentById } from "../components/component";
 import { getArg, getPathParameterAt, setPageTitle } from "./common";
 import { getCompareAt, getDatasetName, saveDatasetFix } from "./requests";
 
@@ -29,7 +29,7 @@ async function main() {
     const res = await getCompareAt(id);
     console.log(res);
 
-    const nav = getComponentWithId("navbar");
+    const nav = getComponentById("navbar");
     nav.addOnLoadListener(async () => {
         const datasetName = await getDatasetName();
         nav.setTitle(`Compare ${datasetName}`);
@@ -38,7 +38,7 @@ async function main() {
 
     setContent(res.title, res.html);
 
-    const labelsContainer = getComponentWithId("labels");
+    const labelsContainer = getComponentById("labels");
     const labels = createLabels(res.labels, res.fix, labelsContainer, onLabelSelected);
 
 

@@ -1,12 +1,12 @@
 import { downloadUserResults, getDatasetDataAt, getDatasetName, saveDatasetLabel } from "./requests";
-import { getComponentWithId } from "../components/component.js";
+import { getComponentById } from "../components/component.js";
 import { redirect, updateUrl, getArg, clamp, clearChildren, getPathParameterAt, setPageTitle } from "./common.js";
 
 
 let user;
 let container;
 let currentData;
-const snackbar = getComponentWithId("snackbar");
+const snackbar = getComponentById("snackbar");
 
 function goToIndex(stepIndex) {
     const currentIndex = Number(getArg("index")) ? clamp(Number(getArg("index")) - 1, 0) : 0;
@@ -51,23 +51,23 @@ async function fetchDataAt(index) {
 
         setContent(res.title, res.html);
 
-        const stepBar = getComponentWithId("step-bar");
+        const stepBar = getComponentById("step-bar");
         stepBar.addOnLoadListener(() => {
             stepBar.setItems(res.steps.count, res.steps.completedSteps, index);
             stepBar.setOnSelectCallback(goToIndex);
         });
 
-        const labels = getComponentWithId("labels");
+        const labels = getComponentById("labels");
         createLabels(res.labels, res.answer, labels, onLabelSelected);
 
-        const controls = getComponentWithId("controls");
+        const controls = getComponentById("controls");
         controls.addOnLoadListener(() => {
             const onPrev = index > 0 ? () => goToIndex(index - 1) : null;
             const onNext = index < res.steps.count - 1 ? () => goToIndex(index + 1) : null;
             controls.setCallbacks(onPrev, onNext);
         })
 
-        const unansweredControl = getComponentWithId("unanswered-controls");
+        const unansweredControl = getComponentById("unanswered-controls");
         unansweredControl.addOnLoadListener(() => {
             const onPrev = res.steps.prev ? () => goToIndex(res.steps.prev) : null;
             const onNext = res.steps.next ? () => goToIndex(res.steps.next) : null;
@@ -112,7 +112,7 @@ function main() {
         redirect('/login');
         return;
     }
-    const nav = getComponentWithId("navbar");
+    const nav = getComponentById("navbar");
     nav.addOnLoadListener(async () => {
         nav.setUser(user);
         const datasetName = await getDatasetName();
@@ -123,7 +123,7 @@ function main() {
     });
 
 
-    container = getComponentWithId("content-container")
+    container = getComponentById("content-container")
     container.addOnLoadListener(loadData);
 }
 

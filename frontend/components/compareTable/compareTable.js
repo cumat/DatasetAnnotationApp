@@ -51,7 +51,8 @@ class TableDataRow {
         // add labels
         data.labels.forEach(answer => {
             const row = createDomElement("tr", { parent: this.table });
-            createDomElement("td", { parent: row, textContent: answer.label, classList: ["label-data"] });
+            const label = answer.label ? answer.label : "Unanswered";
+            createDomElement("td", { parent: row, textContent: label, classList: ["label-data"] });
             const percentageBar = createDomElement("td", { parent: row, classList: ["percentage-bar-data"] });
             createDomElement("div", { parent: percentageBar, classList: ["percentage-bar"], attributes: [{ name: "style", value: (`width: ${answer.percentage}%`) }] })
             createDomElement("td", { parent: row, textContent: answer.percentage + "%", classList: ["percentage-text-data"] });

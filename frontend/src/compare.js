@@ -1,6 +1,6 @@
-import { getComponentWithId as getComponentById } from "../components/component.js";
+import { getComponentById } from "../components/component.js";
 import { TableData, AnswerData } from "../components/compareTable/compareTable.js";
-import { getAgreementText, getCompareResults, getDatasetName } from "./requests.js";
+import { downloadDatasetResults, getAgreementText, getCompareResults, getDatasetName } from "./requests.js";
 import { getArg, redirect, updateUrl } from "./common.js";
 import { UNANSWERED, CONFLICT, FIXES } from "../components/compareTableFilters/compareTableFilters.js";
 
@@ -55,17 +55,16 @@ function filterRes(filter, res) {
                 answers.push(answer);
             }
         }
-        else if (filter == UNANSWERED) {
-            if (answer.labels.length == 0) {
-                answers.push(answer);
-            }
-        }
         else if (filter == CONFLICT) {
             if (answer.labels.length > 1 && !answer.fix) {
                 answers.push(answer);
             }
         }
-
+        else if (filter == UNANSWERED) {
+            if (answer.labels.length == 1 && answer.labels[0].label == null) {
+                answers.push(answer);
+            }
+        }
         else {
             answers.push(answer);
         }
@@ -85,10 +84,30 @@ function showWithFilter(filter) {
         });
     }
 }
+const snackbar = getComponentById("snackbar");
+
+function onDownloadRequested() {
+    downloadDatasetResults().then((res) => {
+        if (res != null) {
+            //alert(`Results available in ${res.path}`);
+            snackbar.createSnackbar(res.msg, res.success);
+        }
+        else {
+            //alert(`error when downloading`);
+            snackbar.createSnackbar(`an error occurred`, false);
+        }
+    });
+}
 
 async function main() {
 
     res = await getCompareResults();
+
+    const nav = getComponentById("navbar");
+    nav.addOnLoadListener(() => {
+        nav.setOnDownloadListener(onDownloadRequested);
+    })
+
     console.log(res);
     let fixes = false;
     let unanswered = false;
@@ -98,11 +117,10 @@ async function main() {
         if (answer.fix) {
             fixes = true;
         }
-
-        if (answer.labels.length > 1) {
+        else if (answer.labels.length > 1) {
             conflict = true;
         }
-        if (answer.labels.length == 0) {
+        else if (answer.labels.length == 1 && answer.labels[0].label == null) {
             unanswered = true;
         }
     });
