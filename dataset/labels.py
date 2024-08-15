@@ -5,7 +5,7 @@ class LabelGroup:
     def __init__(self) -> None:
         pass
 
-    def send_json(self) -> str:
+    def send_json(self) -> dict:
         pass
 
     def compare(self, data1, data2) -> bool:
@@ -19,7 +19,7 @@ class TextLabelGroup(LabelGroup):
         self.labels.append(label)
         return self
 
-    def send_json(self) -> str:
+    def send_json(self) -> dict:
         return {
             "component":"text-labels",
             "data": self.labels
@@ -47,7 +47,7 @@ class NumberLabelGroup(LabelGroup):
         else:
             return "0.01"
         
-    def send_json(self) -> str:
+    def send_json(self) -> dict:
         return {
             "component":"number-labels",
             "data": {
@@ -116,7 +116,7 @@ class ImageLabelGroup(LabelGroup):
     def __init__(self, img_id : str) -> None:
         self.img_id = img_id
 
-    def send_json(self) -> str:
+    def send_json(self) -> dict:
         return {
             "component":"image-label",
             "data": {
@@ -148,7 +148,7 @@ class TimestampLabelGroup(LabelGroup):
     def __init__(self, media_id : str) -> None:
         self.media_id = media_id
 
-    def send_json(self) -> str:
+    def send_json(self) -> dict:
         return {
             "component":"timestamp-label",
             "data": {

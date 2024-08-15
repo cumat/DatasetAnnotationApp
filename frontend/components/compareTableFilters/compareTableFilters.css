@@ -27,11 +27,13 @@
 
 .conflict:hover {
     background-color: var(--warning-color);
+    color: var(--background-color);
 }
 
 .conflict.selected {
     background-color: var(--warning-color);
     transform: translateY(-2px);
+    color: var(--background-color);
 }
 
 
@@ -43,11 +45,13 @@
 
 .fixes:hover {
     background-color: var(--success-color);
+    color: var(--background-color);
 }
 
 .fixes.selected {
     background-color: var(--success-color);
     transform: translateY(-2px);
+    color: var(--background-color);
 }
 
 .unanswered {
@@ -58,9 +62,11 @@
 
 .unanswered:hover {
     background-color: var(--primary-color);
+    color: var(--background-color);
 }
 
 .unanswered.selected {
     background-color: var(--primary-color);
     transform: translateY(-2px);
+    color: var(--background-color);
 }

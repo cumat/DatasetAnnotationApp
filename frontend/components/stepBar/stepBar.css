@@ -74,7 +74,7 @@
 
 .step-bar-item.active.completed .step-counter {
     font-weight: bold;
-    background-color: #32862e;
+    background-color: var(--success-color-hover);
 }
 
 .step-bar-item.active .step-counter:hover {
@@ -82,7 +82,7 @@
 }
 
 .step-bar-item.completed .step-counter {
-    background-color: #67ff60;
+    background-color: var(--success-color);
 }
 
 .step-bar-item:first-child::before {

@@ -39,4 +39,5 @@
 
 .username-form-button:hover {
     background-color: var(--secondary-color);
+    color: var(--background-color);
 }

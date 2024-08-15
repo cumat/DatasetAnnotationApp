@@ -69,8 +69,8 @@ async function fetchDataAt(index) {
 
         const unansweredControl = getComponentById("unanswered-controls");
         unansweredControl.addOnLoadListener(() => {
-            const onPrev = res.steps.prev ? () => goToIndex(res.steps.prev) : null;
-            const onNext = res.steps.next ? () => goToIndex(res.steps.next) : null;
+            const onPrev = res.steps.prev != null ? () => goToIndex(res.steps.prev) : null;
+            const onNext = res.steps.next != null ? () => goToIndex(res.steps.next) : null;
             unansweredControl.setCallbacks(onPrev, onNext);
         })
     }

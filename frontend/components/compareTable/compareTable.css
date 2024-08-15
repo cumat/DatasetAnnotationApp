@@ -21,6 +21,12 @@ th {
     width: 50%;
 }
 
+@media screen and (max-width: 768px) {
+    .percentage-bar {
+        display: none;
+    }
+}
+
 .results-data-row {
     border: solid 2px var(--secondary-color);
 }
@@ -40,16 +46,23 @@ th {
 .label-data {
     white-space: nowrap;
     min-width: 150px;
+    max-width: 150px;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
+
 .fix-data {
-    color: var(--selected-color);
+    color: var(--success-color-hover);
     white-space: nowrap;
     min-width: 150px;
+    max-width: 150px;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .conflict-data {
-    color: var(--warning-color);
+    color: var(--warning-color-hover);
     white-space: nowrap;
     min-width: 150px;
 }
@@ -91,16 +104,22 @@ th {
 }
 
 .pagination-control-btn.disabled {
-    background-color: gray;
-    border-color: gray;
+    background-color: var(--disabled-color);
+    border-color: var(--disabled-color);
+}
+
+.pagination-control-btn.disabled:hover {
+    background-color: var(--disabled-color-hover);
+    border-color: var(--disabled-color-hover);
 }
 
 .pagination-btn.selected {
-    background-color: #ecffe6;
-    border-color: #67ff60;
-    color: #00a01c;
+    background-color: var(--background-color);
+    border-color: var(--success-color);
+    color: var(--text-color)
 }
 
 .pagination-btn.selected:hover {
-    background-color: #67ff60;
+    background-color: var(--success-color);
+    color: var(--background-color)
 }

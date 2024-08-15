@@ -21,4 +21,4 @@ def write_to_file(directory_path: str, filename: str, data: str) -> None:
         file.write(data)
 
 def download_as_json(results: DatasetResults, directory: str = "."):
-    return write_to_file(directory, f'{results.dataset}_results.json', json.dumps(results.to_dict()))
+    return write_to_file(directory, f'{results.dataset}-results.json', json.dumps(results.to_dict()))

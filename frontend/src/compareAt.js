@@ -45,6 +45,7 @@ async function main() {
     const answers = document.getElementById("answers");
     answers.setData(res.answers, (label) => {
         labels.setSelectedLabel(label);
+        onLabelSelected(label);
     });
 }
 

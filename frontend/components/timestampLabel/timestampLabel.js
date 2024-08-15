@@ -190,7 +190,8 @@ export class TimestampLabel extends Component {
     }
     setSelectedLabel(label) {
         this.addOnLoadListener(() => {
-            this.currentValue = label;
+            this.currentValue.setAnswer(label);
+            this.#updateGfx();
         });
     }
 }

@@ -12,6 +12,7 @@
 
 .time-control-btn:hover {
     background-color: var(--secondary-color);
+    color: var(--background-color);
 }
 
 .time-control-btn.disabled {
@@ -32,6 +33,7 @@
 
 .time-reset-btn:hover {
     background-color: var(--failure-color);
+    color: var(--background-color);
 }
 
 .time-playback-btn {
@@ -42,10 +44,11 @@
     border-radius: 10px;
     box-sizing: border-box;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-    color: var(--text-color);
+    color: var(--success-color);
     margin: 10px;
 }
 
 .time-playback-btn:hover {
     background-color: var(--success-color);
+    color: var(--background-color);
 }

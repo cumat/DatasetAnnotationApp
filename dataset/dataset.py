@@ -42,6 +42,8 @@ class Dataset:
         self.allow_blank_labels = blank_labels
     
     def add_data(self, data: Data):
+        if str(data.id) in self.dataset:
+            raise ValueError(f"Data with id '{data.id}' already exists in the dataset.")
         self.dataset[str(data.id)] = data
         self.dataset_order.append(data)
         return self

@@ -23,6 +23,7 @@
 
 .unanswered-btn:hover {
     background-color: var(--primary-color);
+    cursor: pointer;
 }
 
 .unanswered-btn.prev {

@@ -141,13 +141,15 @@ export class ImageLabel extends Component {
 
     #onResize() {
         const img = document.getElementById(this.imageId);
-        img.onload = () => {
-            this.#setCanvasFromImage(img);
-            this.#drawRect();
-        };
-        // If the image is already loaded (cached), trigger the onload handler manually
-        if (img.complete) {
-            img.onload();
+        if (img) {
+            img.onload = () => {
+                this.#setCanvasFromImage(img);
+                this.#drawRect();
+            };
+            // If the image is already loaded (cached), trigger the onload handler manually
+            if (img.complete) {
+                img.onload();
+            }
         }
     }
 

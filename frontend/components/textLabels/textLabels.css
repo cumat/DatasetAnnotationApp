@@ -23,15 +23,21 @@
 }
 
 .text-label:hover {
-    /* border: 2px solid var(--primary-color); */
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
     transform: translateY(-2px);
 }
 
 .text-label.selected {
     transform: translateY(-2px);
-    background-color: var(--background-color);
-    border-color: var(--selected-color);
-    color: var(--selected-color);
+    background-color: var(--success-color);
+    border-color: var(--success-color);
+    color: var(--background-color);
+}
+
+.text-label.selected:hover {
+    background-color: var(--success-color-hover);
+    border-color: var(--success-color-hover);
 }
 
 .label-row {
