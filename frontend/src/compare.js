@@ -96,6 +96,8 @@ function onDownloadRequested() {
             //alert(`error when downloading`);
             snackbar.createSnackbar(`an error occurred`, false);
         }
+    }).catch(() => {
+        snackbar.createSnackbar(`an error occurred`, false);
     });
 }
 
@@ -112,6 +114,18 @@ async function main() {
     let fixes = false;
     let unanswered = false;
     let conflict = false;
+
+    if (res.answers.length == 0) {
+        const title = document.getElementById("dataset-title");
+        const name = await getDatasetName();
+
+        title.textContent = `No results for ${name}`
+        filters.classList.add("hidden");
+        compareTable.classList.add("hidden");
+        return;
+    }
+    filters.classList.remove("hidden");
+    compareTable.classList.remove("hidden");
     // check
     res.answers.forEach(answer => {
         if (answer.fix) {
@@ -138,3 +152,6 @@ async function main() {
 main();
 
 window.addEventListener('pageshow', main);
+window.addEventListener('popstate', (event) => {
+    redirect("/home");
+});

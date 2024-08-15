@@ -23,7 +23,7 @@
     cursor: default;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 260px;
+    /* max-width: 260px; */
 }
 
 .navbar-home-button {

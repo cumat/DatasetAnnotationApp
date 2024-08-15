@@ -83,6 +83,10 @@ def get_user_results():
     answers = []
     # gather answers from files
     users_answers = get_dataset_results('results/.', dataset.name)
+    if users_answers.__len__() == 0:
+        return {
+            "answers" : answers
+        }
     for d in dataset.get_dataset():
         id = d.id
         

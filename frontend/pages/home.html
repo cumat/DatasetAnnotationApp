@@ -15,6 +15,9 @@
 <body>
     <div id="root">
         <navbar-comp navtitle="Home"></navbar-comp>
+        <flex-container direction="column" alignitems="center" justify="center" wrap="wrap">
+            <h2 id="dataset-name"></h2>
+        </flex-container>
         <flex-container direction="row" alignitems="center" justify="center" wrap="wrap">
             <home-button title="Annotate Dataset" description="This section allows you to annotate the dataset."
                 href="annotate">
@@ -25,5 +28,6 @@
         </flex-container>
     </div>
 </body>
+<script type="module" src="/src/home.js"></script>
 
 </html>

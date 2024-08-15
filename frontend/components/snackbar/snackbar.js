@@ -3,6 +3,7 @@ import { Component } from '../component.js';
 const css = "/components/snackbar/snackbar.css";
 const html = "/components/snackbar/snackbar.html";
 
+const autoDeleteTime = 5;
 
 function createSnackbarElem(message, container, stateClass) {
     const root = createDomElement("div", { classList: ['snackbar-elem', stateClass], parent: container, textContent: message });
@@ -11,6 +12,12 @@ function createSnackbarElem(message, container, stateClass) {
         // remove the snackbar on button clicked
         container.removeChild(root);
     })
+    // Set a timeout to automatically delete the snackbar after x seconds
+    const autoDeleteTimeout = setTimeout(() => {
+        if (container.contains(root)) {
+            container.removeChild(root);
+        }
+    }, autoDeleteTime * 1000); // Convert seconds to milliseconds
 }
 
 export class Snackbar extends Component {

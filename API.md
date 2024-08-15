@@ -44,6 +44,7 @@
   - `content` (str): The accumulated HTML content.
 - **Methods:**
   - `add_html(content: str) -> HtmlView`: Adds HTML content to the view.
+  - `add_style(res_source : str) -> HtmlView`: Adds a stylesheet link with res_source as href.
   - `add_text(text: str) -> HtmlView`: Adds a text paragraph to the view.
   - `add_img(source: str, id: str | None) -> HtmlView`: Adds an image to the view.
   - `add_external_html(source_path: str) -> HtmlView`: Adds HTML content from an external file.

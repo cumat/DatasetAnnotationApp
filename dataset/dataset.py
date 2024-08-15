@@ -6,7 +6,9 @@ class HtmlView:
     def add_html(self, content):
         self.content += content
         return self
-    
+    def add_style(self, res_source : str):
+        self.content += f'<link rel="stylesheet" href="{res_source}">'
+        return self
     def add_text(self, text):
         self.content += f"<p>{text}</p>"
         return self

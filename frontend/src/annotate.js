@@ -7,6 +7,7 @@ let user;
 let container;
 let currentData;
 const snackbar = getComponentById("snackbar");
+const nav = getComponentById("navbar");
 
 function goToIndex(stepIndex) {
     const currentIndex = Number(getArg("index")) ? clamp(Number(getArg("index")) - 1, 0) : 0;
@@ -48,6 +49,11 @@ async function fetchDataAt(index) {
     if (res) {
         console.log("data at ", index, res);
         currentData = res;
+
+        // set navbar title
+        nav.addOnLoadListener(() => {
+            nav.setTitle(`Annotate ${res.steps.complete}/${res.steps.count}`);
+        });
 
         setContent(res.title, res.html);
 
@@ -112,14 +118,11 @@ function main() {
         redirect('/login');
         return;
     }
-    const nav = getComponentById("navbar");
     nav.addOnLoadListener(async () => {
         nav.setUser(user);
         const datasetName = await getDatasetName();
-        console.log("dataset name", datasetName);
-        nav.setTitle(`Annotate ${datasetName}`);
         nav.setOnDownloadListener(onDownloadRequested);
-        setPageTitle(`Annotate ${datasetName}`);
+        //setPageTitle(`Annotate ${datasetName}`);
     });
 
 

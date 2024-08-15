@@ -7,6 +7,12 @@ Welcome to the Dataset Annotation Web App! This application allows researchers t
 
 For detailed information on how to interact with the core components of the app, refer to the [API Documentation](./API.md). If you're interested in extending the app by adding new types of labels, please see the [Labels Documentation](./LABELS.md).
  
+## Examples
+To help you get started, there are two included examples: 
+- a basic introduction to creating and annotating a dataset [link](./examples/basic/README.md).
+- a more complex example using GitHub issues from a repository [link](./examples/github-issues/README.md).
+  
+These examples can guide you through both simple and advanced use cases.
 
 ## Getting started
 

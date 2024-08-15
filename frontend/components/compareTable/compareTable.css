@@ -87,6 +87,7 @@ th {
 
 .pagination-btn:hover {
     background-color: var(--secondary-color);
+    color: var(--background-color);
 }
 
 .pagination-control-btn {

@@ -112,33 +112,29 @@ export class TimestampLabel extends Component {
         this.startTimeButton.classList.add("disabled");
         this.endTimeButton.classList.add("disabled");
 
-
         if (this.currentValue.hasValue() == false) {
             this.isPlaying = false;
             const vid = document.getElementById(this.mediaId)
-            vid.setAttribute("controls", "controls");
+            //vid.setAttribute("controls", "controls");
             this.plabackPlayIcon.classList.remove("hidden");
             this.startTimeButton.classList.remove("disabled");
             this.endTimeButton.classList.remove("disabled");
+            vid.pause();
             return;
         }
         this.isPlaying = !this.isPlaying;
         const vid = document.getElementById(this.mediaId)
         vid.currentTime = this.currentValue.start;
         if (this.isPlaying) {
-            vid.removeAttribute("controls");
+            //vid.removeAttribute("controls");
             this.plabackPauseIcon.classList.remove("hidden");
-        }
-        else {
-            vid.setAttribute("controls", "controls");
-            this.plabackPlayIcon.classList.remove("hidden");
-            this.startTimeButton.classList.remove("disabled");
-            this.endTimeButton.classList.remove("disabled");
-        }
-        if (this.isPlaying) {
             vid.play();
         }
         else {
+            //vid.setAttribute("controls", "controls");
+            this.plabackPlayIcon.classList.remove("hidden");
+            this.startTimeButton.classList.remove("disabled");
+            this.endTimeButton.classList.remove("disabled");
             vid.pause();
         }
     }
