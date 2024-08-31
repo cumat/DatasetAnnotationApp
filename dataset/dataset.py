@@ -1,4 +1,4 @@
-from dataset.labels import TextLabelGroup, NumberLabelGroup, ImageLabelGroup, TimestampLabelGroup, LabelGroup, NumberValueType
+from dataset.labels import TextLabelGroup, NumberLabelGroup, ImageLabelGroup, TimestampLabelGroup, LabelGroup, NumberValueType, MultiImageLabelGroup
 class HtmlView:
     def __init__(self) -> None:
         self.content = ""

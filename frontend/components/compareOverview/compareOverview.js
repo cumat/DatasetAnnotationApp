@@ -20,11 +20,13 @@ class CompareElement {
         }
         s += ")";
         createDomElement("h3", {
-            textContent: label, parent: this.root
+            textContent: label,
+            classList: ['compare-element-label'],
+            parent: this.root
         });
 
         createDomElement("span", {
-            textContent: `: ${percentage}% ${s}`, parent: this.root
+            textContent: `: ${percentage.toFixed(2)}% ${s}`, parent: this.root
         });
     }
 

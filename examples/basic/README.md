@@ -91,8 +91,8 @@ dataset.add_data(Data(id="5", title="timestamp label", view=view, labels=labels)
 - The `HtmlView` object includes an external HTML file that contains a video or audio element with `id="media-id"`.
 ```html
 <!-- Video -->
-<video id="media-id" width="320" height="240" controls>
-    <source src="/res/vid.mp4" type="video/mp4">
+<video id="media-id" width="100%" controls>
+    <source src="/res/assets/vid.mp4" type="video/mp4">
     Your browser does not support the video tag.
 </video>
 <!-- Audio -->
@@ -100,6 +100,7 @@ dataset.add_data(Data(id="5", title="timestamp label", view=view, labels=labels)
     <source src="/res/assets/vid.mp4" type="video/mp4">
     Your browser does not support the audio tag.
 </audio>
+
 ```
 - The data is given an `id` of `"5"`, a `title` of `"timestamp label"`, and added to the dataset.
 

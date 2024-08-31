@@ -19,3 +19,14 @@
     color: var(--background-color);
 
 }
+
+.compare-element-label {
+    max-width: 300px;
+    /* Adjust this value as needed */
+    white-space: nowrap;
+    /* Prevents text from wrapping to the next line */
+    overflow: hidden;
+    /* Hides the overflow content */
+    text-overflow: ellipsis;
+    /* Adds the ellipsis (...) at the end of the text */
+}

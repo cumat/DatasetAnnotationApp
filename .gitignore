@@ -131,7 +131,3 @@ results/*
 !.gitignore
 !.nvmrc
 !.phpcs.xml.dist
-
-road0.png
-vid.mp4
-video-test.html

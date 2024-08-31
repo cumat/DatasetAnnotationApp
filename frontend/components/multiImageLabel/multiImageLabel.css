@@ -1,0 +1,103 @@
+.del-btn {
+    min-width: 100px;
+    min-height: 50px;
+    background-color: var(--background-color);
+    border: 2px solid var(--failure-color);
+    border-radius: 10px;
+    box-sizing: border-box;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    color: var(--text-color);
+    margin: 10px;
+}
+
+.del-btn:hover {
+    background-color: var(--failure-color);
+    color: var(--background-color);
+}
+
+.controller-container {
+    display: flex;
+    padding: 10px;
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.rect-ctrl-container {
+    display: flex;
+    padding: 10px;
+    border: 2px solid var(--secondary-color);
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Basic styling for the select element */
+select {
+    /* appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none; */
+    /* Remove default dropdown icon in Firefox */
+    background-color: var(--background-color);
+    /* Green background color */
+    color: var(--secondary-color);
+    border: 2px solid var(--secondary-color);
+
+
+    /* White text color */
+    padding: 10px 15px;
+    /* Padding */
+    font-size: 16px;
+    /* Font size */
+    border-radius: 4px;
+    /* Rounded corners */
+    cursor: pointer;
+    /* Pointer cursor on hover */
+    width: 200px;
+    /* Width of the select box */
+    margin-top: 10px;
+    /* Margin above the select box */
+}
+
+/* Add a custom dropdown icon */
+select {
+    /* background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 10 5"><polygon points="0,0 10,0 5,5" fill="white"/></svg>'); */
+    background-repeat: no-repeat;
+    /* Prevent repeating the background image */
+    background-position: right 10px center;
+    /* Position the background image */
+    background-size: 10px;
+    /* Size of the dropdown icon */
+    padding-right: 30px;
+    /* Extra padding to make room for the dropdown icon */
+}
+
+/* Style the select element on hover */
+select:hover {
+    background-color: var(--secondary-color);
+    color: var(--background-color);
+    border: 2px solid var(--secondary-color);
+}
+
+/* Style the select element when it is focused */
+select:focus {
+    outline: none;
+    /* Remove the outline */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    /* Add a subtle shadow */
+}
+
+/* Style for the option elements */
+option {
+    background-color: #ffffff;
+    /* White background for options */
+    color: #000000;
+    /* Black text color */
+    padding: 5px;
+    /* Padding inside options */
+}

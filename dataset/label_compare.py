@@ -36,6 +36,8 @@ class LabelAnswerCompare:
             found = False
             for c in counted_answers:
                 if self.label_group.compare(answer, c["label"]):
+                    # append to the "equal" label the other users
+                    self.users[c["label"]].append(self.users[answer])
                     c["count"] += 1
                     found = True
                     break
@@ -82,7 +84,7 @@ class LabelAnswerCompare:
     def return_dict_with_users(self) -> dict:
         #counter = Counter(self.answers)        
         counted_answers = self.get_counter()
-
+        print("USERS:: ",self.users)
         return [
             {
                 "label":  c["label"],

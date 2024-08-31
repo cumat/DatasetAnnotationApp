@@ -175,3 +175,77 @@ class TimestampLabelGroup(LabelGroup):
         end_equal = abs(end1 - end2) <= tolerance
 
         return start_equal and end_equal
+    
+class MultiImageLabelGroup(LabelGroup):
+    def __init__(self, image_id: str, labels: list[str]) -> None:
+        self.image_id = image_id
+        self.labels = labels.copy()
+
+    def add_label(self, label : str):
+        self.labels.append(label)
+
+    def send_json(self) -> dict:
+        return {
+            "component":"multi-image-label",
+            "data": {
+                "imageId" : self.image_id,
+                "labels" : self.labels
+            }
+        }
+    
+    def compare(self, data1, data2) -> bool:
+        try:
+            rects1 = json.loads(data1)
+            rects2 = json.loads(data2)
+
+            # Check if both datasets are lists
+            if not isinstance(rects1, list) or not isinstance(rects2, list):
+                return False
+            
+            # Check if each rectangle has the required keys
+            for rect in rects1 + rects2:
+                if not all(key in rect for key in ['startX', 'startY', 'endX', 'endY', 'label']):
+                    return False
+
+            # Create dictionaries to count rectangles by label
+            label_count1 = {}
+            label_count2 = {}
+            tolerance = 0.6
+            for rect in rects1:
+                label = rect['label']
+                if label not in label_count1:
+                    label_count1[label] = []
+                label_count1[label].append(RectData(rect))
+
+            for rect in rects2:
+                label = rect['label']
+                if label not in label_count2:
+                    label_count2[label] = []
+                label_count2[label].append(RectData(rect))
+
+            # Check if both datasets have the same labels with the same counts
+            if label_count1.keys() != label_count2.keys():
+                return False
+            
+            # Check if both data have the same number of rectangles for each label
+            for label in label_count1:
+                if len(label_count1[label]) != len(label_count2[label]):
+                    return False
+            for label in label_count1:
+                if len(label_count1[label]) != len(label_count2[label]):
+                    return False
+
+                # Check if each rectangle in label_count1[label] intersects with at least one in label_count2[label]
+                for rect1 in label_count1[label]:
+                    has_intersection = any(
+                        rect1.intersection_percentage(rect2) >= tolerance
+                        for rect2 in label_count2[label]
+                    )
+                    if not has_intersection:
+                        return False
+
+            # If all checks are passed, return True
+            return True
+
+        except json.JSONDecodeError:
+            return False
