@@ -70,7 +70,6 @@ export class ImageLabel extends Component {
     }
     setupHtml(node, attributes) {
         this.canvas = node.querySelector(".img-canvas");
-        this.colorPicker = node.querySelector(".color-picker");
         this.resetButton = node.querySelector(".reset-btn");
         this.helpText = node.querySelector(".help-text");
         this.ctx = this.canvas.getContext("2d");
@@ -78,7 +77,7 @@ export class ImageLabel extends Component {
         this.imageId = null;
         this.isDrawnig = false;
         this.currentValue = new ImageLabelValue();
-        this.currentColor = this.colorPicker.value;
+        this.currentColor = '#ffff00';
         // add canvas draw events
         this.canvas.addEventListener("mousedown", (e) => {
             const rect = this.canvas.getBoundingClientRect();
@@ -109,13 +108,6 @@ export class ImageLabel extends Component {
 
         this.resetButton.addEventListener("click", () => {
             this.#resetRect();
-        })
-
-        this.colorPicker.addEventListener("change", (e) => {
-            const color = e.target.value;
-            this.currentColor = color;
-            // redraw
-            this.#drawRect();
         })
         this.currentValue.addOnValueChangeListener(() => {
             console.log("value change callback");
@@ -164,8 +156,20 @@ export class ImageLabel extends Component {
         this.#drawRect();
     }
     #drawRect() {
+
+
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.beginPath();
+
+        // Draw the black outline first
+        this.ctx.beginPath();  // Start a new path for the outline
+        this.ctx.rect(this.currentValue.startX, this.currentValue.startY,
+            this.currentValue.endX - this.currentValue.startX,
+            this.currentValue.endY - this.currentValue.startY); // Define the rectangle path
+        this.ctx.lineWidth = 4;  // Set the line width for the black outline (slightly thicker)
+        this.ctx.strokeStyle = 'black';  // Set the stroke color to black
+        this.ctx.stroke();  // Stroke the rectangle path to draw the outline
+        // Draw the rectangle
         this.ctx.rect(this.currentValue.startX, this.currentValue.startY,
             this.currentValue.endX - this.currentValue.startX,
             this.currentValue.endY - this.currentValue.startY);

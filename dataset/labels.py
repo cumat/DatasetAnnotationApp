@@ -249,3 +249,24 @@ class MultiImageLabelGroup(LabelGroup):
 
         except json.JSONDecodeError:
             return False
+
+class MultiTimestampLabelGroup(LabelGroup):
+    def __init__(self, mediaId: str, labels: list[str]) -> None:
+        self.mediaId = mediaId
+        self.labels = labels.copy()
+
+    def add_label(self, label : str):
+        self.labels.append(label)
+
+    def send_json(self) -> dict:
+        return {
+            "component":"multi-timestamp-label",
+            "data": {
+                "mediaId" : self.mediaId,
+                "labels" : self.labels
+            }
+        }
+    
+    def compare(self, data1, data2) -> bool:
+        
+        return False

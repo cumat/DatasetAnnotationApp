@@ -27,11 +27,6 @@ export function getComponentById(id) {
 export class Component extends HTMLElement {
     constructor(htmlPath, cssPath = null) {
         super();
-        // set id if present
-        // if (this.attributes.id) {
-        //     console.log("saved id: ", this.attributes.id.value);
-        //     components[this.attributes.id.value] = this;
-        // }
         // set is loaded to false
         this.isLoaded = false;
         this.onLoaded = [];

@@ -73,10 +73,12 @@ class RectController {
         });
         const labelsList = createDomElement("select", {
             parent: container,
+            classList: ['label-select']
         });
         for (let index = 0; index < labels.length; index++) {
             createDomElement("option", {
                 parent: labelsList,
+                classList: ['label-option'],
                 attributes: [
                     {
                         name: "value",
@@ -129,8 +131,7 @@ export class MultiImageLabel extends Component {
         this.rectsController = [];
         this.currentRectValue = null;
         this.hoverRectIndex = null;
-        this.colorPicker = node.querySelector(".color-picker");
-        this.currentColor = this.colorPicker.value;
+        this.currentColor = '#ffff00';
         this.labels = [];
         this.currentIndex = 0;
         // add canvas draw events
@@ -269,17 +270,33 @@ export class MultiImageLabel extends Component {
                 // Fill the rectangle with the semi-transparent color
                 this.ctx.fillRect(topLeftX, topLeftY, width, height);
             }
+            // Draw the black outline first
+            this.ctx.beginPath();  // Start a new path for the outline
+            this.ctx.rect(topLeftX, topLeftY, width, height);  // Define the rectangle path
+            this.ctx.lineWidth = 4;  // Set the line width for the black outline (slightly thicker)
+            this.ctx.strokeStyle = 'black';  // Set the stroke color to black
+            this.ctx.stroke();  // Stroke the rectangle path to draw the outline
             // Draw the rectangle
             this.ctx.rect(topLeftX, topLeftY, width, height);
             this.ctx.lineWidth = 2;
             this.ctx.strokeStyle = this.currentColor;
             this.ctx.stroke();
 
-            // Draw the text label at the top-left corner
+            // Set the font and calculate the width and height of the text
             this.ctx.font = "16px Arial"; // Set font size and font family
+            const text = `#${index}-${element.label}`;
+            const textWidth = this.ctx.measureText(text).width;
+            const textHeight = 16; // Approximate height of the text based on font size
+
+            // Draw the black background rectangle behind the text
+            this.ctx.fillStyle = 'black'; // Set fill color to black
+            this.ctx.fillRect(topLeftX + 4, topLeftY - textHeight - 4, textWidth + 2, textHeight + 4); // Draw the rectangle
+
+            // Draw the text on top of the black background
             this.ctx.fillStyle = this.currentColor; // Set text color (same as stroke color)
             this.ctx.textBaseline = "bottom"; // Align text baseline to the bottom of the text
-            this.ctx.fillText(`#${index}-${element.label}`, topLeftX + 5, topLeftY - 2); // Draw text at the top-left corner
+            this.ctx.fillText(text, topLeftX + 5, topLeftY - 2); // Draw text at the top-left corner
+
         })
 
     }

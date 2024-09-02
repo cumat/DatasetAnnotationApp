@@ -1,4 +1,4 @@
-from dataset.labels import TextLabelGroup, NumberLabelGroup, ImageLabelGroup, TimestampLabelGroup, LabelGroup, NumberValueType, MultiImageLabelGroup
+from dataset.labels import TextLabelGroup, NumberLabelGroup, ImageLabelGroup, TimestampLabelGroup, LabelGroup, NumberValueType, MultiImageLabelGroup, MultiTimestampLabelGroup
 class HtmlView:
     def __init__(self) -> None:
         self.content = ""
@@ -17,6 +17,19 @@ class HtmlView:
             self.content += (f'<img id={id} src="{source}" width="500">')
         else:
             self.content += (f'<img src="{source}" width="500">')
+        return self
+    def add_video(self, source: str, id: str | None):
+        id_str = ""
+        if id:
+            id_str= f"id={id}"
+        
+        self.content += (f'''
+                            <div style="display: flex; width: 100%; justify-content: center;">
+                                <video {id_str} width="80%" preload="auto" controls>
+                                    <source src="{source}" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>''')
         return self
     def add_external_html(self, source_path:str):
         try:

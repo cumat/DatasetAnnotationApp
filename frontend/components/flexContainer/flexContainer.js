@@ -1,7 +1,5 @@
 import { Component } from "../component.js";
 
-const htmlPath = "/components/flexContainer/flexContainer.html";
-
 // Define default values for flex properties
 const DEFAULT_STYLE = {
     direction: 'row',           // Default flex-direction
@@ -12,12 +10,19 @@ const DEFAULT_STYLE = {
     alignSelf: 'auto'          // Default align-self
 };
 
-export class FlexContainer extends Component {
+export class FlexContainer extends HTMLElement {
     constructor() {
-        super(htmlPath);
+        super();
+        this.setupHtml(this.#getAttributes());
     }
-    setupHtml(node, attributes, children) {
-        const container = node.querySelector(".flex-container");
+    // Method to collect attributes as an object
+    #getAttributes() {
+        return Array.from(this.attributes).reduce((acc, attr) => {
+            acc[attr.name] = attr.value;
+            return acc;
+        }, {});
+    }
+    setupHtml(attributes) {
         // define default values
         const style = {
             flexDirection: attributes.direction || DEFAULT_STYLE.direction,
@@ -29,17 +34,15 @@ export class FlexContainer extends Component {
         };
 
         // add styles
-        container.style.display = 'flex';
-        container.style.flexDirection = style.flexDirection;
-        container.style.flexWrap = style.flexWrap;
-        container.style.justifyContent = style.justifyContent;
-        container.style.alignItems = style.alignItems;
-        container.style.alignContent = style.alignContent;
-
-        // add children to container
-        children.forEach(child => {
-            container.appendChild(child);
-        });
+        this.style.display = 'flex';
+        this.style.flexDirection = style.flexDirection;
+        this.style.flexWrap = style.flexWrap;
+        this.style.justifyContent = style.justifyContent;
+        this.style.alignItems = style.alignItems;
+        this.style.alignContent = style.alignContent;
+    }
+    addOnLoadListener(callback) {
+        callback();
     }
 }
 
