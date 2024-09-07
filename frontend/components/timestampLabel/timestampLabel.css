@@ -1,25 +1,102 @@
-.time-control-btn {
-    min-width: 200px;
-    min-height: 50px;
+.playback-bar {
+    flex-grow: 1;
+    height: 10px;
+    background-color: var(--background-color-hover);
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    margin: 10px;
+    user-select: none;
+}
+
+/* Add a pseudo-element to increase the clickable area */
+.playback-bar::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    /* Adjust this value to increase the clickable area above */
+    bottom: -10px;
+    /* Adjust this value to increase the clickable area below */
+    left: 0;
+    right: 0;
+    cursor: pointer;
+    user-select: none;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: var(--primary-color);
+    border-radius: 5px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    user-select: none;
+}
+
+.handle {
+    width: 12px;
+    height: 12px;
     background-color: var(--background-color);
-    border: 2px solid var(--secondary-color);
-    border-radius: 10px;
-    box-sizing: border-box;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-    color: var(--text-color);
+    border: 2px solid var(--primary-color);
+    /* border-radius: 50%; */
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    user-select: none;
+}
+
+.progress-bar.active {
+    background-color: var(--success-color);
+}
+
+.handle.active {
+    background-color: var(--success-color);
+    border: 2px solid var(--primary-color);
+}
+
+
+/* Pseudo-element to increase the clickable area around each handle */
+.handle::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    /* Adjust this to increase the clickable area above */
+    bottom: -10px;
+    /* Adjust this to increase the clickable area to the right */
+    cursor: pointer;
+    user-select: none;
+    z-index: -1;
+    /* Place it behind the actual handle */
+}
+
+.single-label-timestamp-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 10px;
+    width: 100%;
+}
+
+.label-timestamp-upper-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    width: 100%;
+}
+
+.label-timestamp-upper-container>* {
     margin: 10px;
 }
 
-.time-control-btn:hover {
-    background-color: var(--secondary-color);
-    color: var(--background-color);
-}
-
-.time-control-btn.disabled {
-    background-color: var(--warning-color);
-}
-
-.time-reset-btn {
+.remove-btn {
     min-width: 200px;
     min-height: 50px;
     background-color: var(--background-color);
@@ -31,24 +108,160 @@
     margin: 10px;
 }
 
-.time-reset-btn:hover {
+.remove-btn:hover {
     background-color: var(--failure-color);
     color: var(--background-color);
 }
 
-.time-playback-btn {
-    min-width: 50px;
-    min-height: 50px;
+.loop-btn {
+    font-size: larger;
+    min-width: 40px;
+    min-height: 40px;
     background-color: var(--background-color);
     border: 2px solid var(--success-color);
     border-radius: 10px;
     box-sizing: border-box;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
     color: var(--success-color);
+    margin-right: 5px;
+}
+
+
+
+.loop-btn:hover {
+    background-color: var(--success-color);
+    color: var(--background-color);
+}
+
+.loop-btn.active {
+    background-color: var(--success-color);
+    color: var(--background-color);
+}
+
+.loop-btn.active:hover {
+    background-color: var(--background-color);
+    border: 2px solid var(--success-color);
+}
+
+/* Basic styling for the select element */
+.label-select {
+    /* appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none; */
+    /* Remove default dropdown icon in Firefox */
+    background-color: var(--background-color);
+    /* Green background color */
+    color: var(--secondary-color);
+    border: 2px solid var(--secondary-color);
+
+    /* White text color */
+    padding: 10px 15px;
+    /* Padding */
+    font-size: 16px;
+    /* Font size */
+    border-radius: 4px;
+    /* Rounded corners */
+    cursor: pointer;
+    /* Pointer cursor on hover */
+    width: 200px;
+    /* Width of the select box */
+}
+
+/* Add a custom dropdown icon */
+.label-select {
+    /* background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 10 5"><polygon points="0,0 10,0 5,5" fill="white"/></svg>'); */
+    background-repeat: no-repeat;
+    /* Prevent repeating the background image */
+    background-position: right 10px center;
+    /* Position the background image */
+    background-size: 10px;
+    /* Size of the dropdown icon */
+    padding-right: 30px;
+    /* Extra padding to make room for the dropdown icon */
+}
+
+/* Style the select element on hover */
+.label-select:hover {
+    background-color: var(--secondary-color);
+    color: var(--background-color);
+    border: 2px solid var(--secondary-color);
+}
+
+/* Style the select element when it is focused */
+.label-select:focus {
+    outline: none;
+    /* Remove the outline */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    /* Add a subtle shadow */
+}
+
+/* Style for the option elements */
+.label-option {
+    background-color: #ffffff;
+    /* White background for options */
+    color: #000000;
+    /* Black text color */
+    padding: 5px;
+    /* Padding inside options */
+}
+
+.label-option:hover {
+    background-color: #ffffff;
+}
+
+.scrollable-container {
+    max-height: 350px;
+    /* Sets the maximum height of the container */
+    overflow-y: auto;
+    /* Optional: Adds a border to the container */
+    margin: 10px;
+    padding: 10px;
+    /* Optional: Adds some padding inside the container */
+    box-sizing: border-box;
+}
+
+.scrollable-container::-webkit-scrollbar {
+    width: 8px;
+    /* Width of the scrollbar */
+}
+
+.scrollable-container::-webkit-scrollbar-track {
+    background: transparent;
+    /* Background of the scrollbar track */
+}
+
+.scrollable-container::-webkit-scrollbar-thumb {
+    background: #888;
+    /* Color of the scrollbar thumb */
+    border-radius: 4px;
+    /* Rounded corners of the scrollbar thumb */
+}
+
+.scrollable-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+    /* Color of the scrollbar thumb when hovered */
+}
+
+.create-delete-btn {
+    background-color: var(--background-color);
+    /* Green background color */
+    color: var(--secondary-color);
+    border: 2px solid var(--secondary-color);
+
+    /* White text color */
+    padding: 10px 15px;
+    /* Padding */
+    font-size: 16px;
+    /* Font size */
+    border-radius: 4px;
+    /* Rounded corners */
+    cursor: pointer;
+    /* Pointer cursor on hover */
+    width: 200px;
     margin: 10px;
 }
 
-.time-playback-btn:hover {
-    background-color: var(--success-color);
+.create-delete-btn:hover {
+    background-color: var(--secondary-color);
     color: var(--background-color);
 }

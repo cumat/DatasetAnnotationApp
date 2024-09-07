@@ -1,4 +1,4 @@
-import { createDomElement, importCss } from '../../src/common.js';
+import { clearChildren, createDomElement, importCss } from '../../src/common.js';
 import { Component } from '../component.js';
 const css = "/components/multiTimestampLabel/multiTimestampLabel.css";
 const html = "/components/multiTimestampLabel/multiTimestampLabel.html";
@@ -8,39 +8,6 @@ class TimestampLabelValue {
         this.label = label;
         this.start = start;
         this.end = end;
-    }
-}
-
-class Playbackbutton {
-
-    constructor(parent, onClick) {
-        const innerhtml = `
-        <svg width="24" height="24" viewBox="0 0 100 100" fill="currentColor" class="playback-play">
-                <polygon points="0,0 100,50 0,100" />
-            </svg>
-            <svg width="24" height="24" viewBox="0 0 100 100" fill="currentColor" class="playback-pause hidden">
-                <g stroke="currentColor" stroke-width="20">
-                    <line x1="25" y1="0" x2="25" y2="100" />
-                    <line x1="75" y1="0" x2="75" y2="100" />
-                </g>
-            </svg>
-        `;
-        const btn = createDomElement("button", {
-            parent: parent,
-            classList: ['time-playback-btn']
-        })
-        btn.addEventListener("click", () => {
-            onClick();
-        })
-        btn.innerHTML = innerhtml;
-    }
-
-    pause() {
-
-    }
-
-    play() {
-
     }
 }
 
@@ -264,15 +231,15 @@ export class MultiTimestampLabel extends HTMLElement {
         importCss(css);
         this.currentIndex = 0;
         this.timestamps = new Map();
-        this.values = new Map();
         this.activeIndex = null;
+        this.container = createDomElement("div", {
+            classList: ['scrollable-container']
+        });
     }
 
     connectedCallback() {
-        this.container = createDomElement("div", {
-            parent: this,
-            classList: ['scrollable-container']
-        });
+        clearChildren(this);
+        this.appendChild(this.container);
         this.buttonContainer = createDomElement("div", {
             parent: this
         });
@@ -301,7 +268,7 @@ export class MultiTimestampLabel extends HTMLElement {
         // save value
         // create an array from the map
         if (this.timestamps.size == 0) {
-            this.onSelect(JSON.stringify(null));
+            this.onSelect(null);
             return;
         }
         const vec = []
@@ -388,7 +355,13 @@ export class MultiTimestampLabel extends HTMLElement {
             }
         }
     }
-
+    #clear() {
+        this.currentIndex = 0;
+        this.timestamps.clear();
+        this.activeIndex = null;
+        console.log("clear");
+        clearChildren(this.container);
+    }
     #parseAnswer(answer) {
         const ans = JSON.parse(answer);
         if (ans) {
@@ -399,6 +372,7 @@ export class MultiTimestampLabel extends HTMLElement {
     }
 
     #setData(data, answer) {
+        this.#clear();
         this.mediaId = data.mediaId;
 
         this.video = document.getElementById(this.mediaId);
@@ -427,8 +401,9 @@ export class MultiTimestampLabel extends HTMLElement {
         this.#setData(data, answer);
         this.setOnSelectCallback(onSelectCallback);
     }
-    setSelectedLabel(label) {
-        this.currentValue.setAnswer(label);
+    setSelectedLabel(answer) {
+        this.#clear();
+        this.#parseAnswer(answer);
     }
 }
 

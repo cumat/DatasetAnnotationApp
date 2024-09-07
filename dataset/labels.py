@@ -36,10 +36,11 @@ class NumberValueType:
 
 class NumberLabelGroup(LabelGroup):
     def __init__(self,min: float = sys.float_info.min, max:float = sys.float_info.max, 
-                 value_type : NumberValueType = NumberValueType.FLOAT) -> None:
+                 value_type : NumberValueType = NumberValueType.FLOAT, round_digits: int = 0) -> None:
         self.min = min
         self.max = max
         self.value_type = value_type
+        self.ndigits = round_digits
 
     def value_type_to_js(self):
         if self.value_type == NumberValueType.INT:
@@ -59,7 +60,7 @@ class NumberLabelGroup(LabelGroup):
     
     def compare(self, data1, data2) -> bool:
         if(self.value_type == NumberValueType.FLOAT):
-            if round(float(data1)) == round(float(data2)):
+            if round(float(data1), self.ndigits) == round(float(data2), self.ndigits):
                 return True
             else:
                 return False
@@ -113,8 +114,9 @@ class RectData:
         return (intersection_area / union_area)
 
 class ImageLabelGroup(LabelGroup):
-    def __init__(self, img_id : str) -> None:
+    def __init__(self, img_id : str, overlap_percentage: float = 0.6) -> None:
         self.img_id = img_id
+        self.tolerance = overlap_percentage
 
     def send_json(self) -> dict:
         return {
@@ -133,7 +135,7 @@ class ImageLabelGroup(LabelGroup):
                 return False
             rect1 = RectData(rect1)
             rect2 = RectData(rect2)
-            tolerance = 0.6
+            tolerance = self.tolerance
             
             intersection = rect1.intersection_percentage(rect2)
             print(f'intersection {intersection} tolerance: {tolerance}')
@@ -145,8 +147,9 @@ class ImageLabelGroup(LabelGroup):
             return False
         
 class TimestampLabelGroup(LabelGroup):
-    def __init__(self, media_id : str) -> None:
+    def __init__(self, media_id : str, start_end_tolerance: float = 1.5) -> None:
         self.media_id = media_id
+        self.tolerance = start_end_tolerance
 
     def send_json(self) -> dict:
         return {
@@ -163,7 +166,7 @@ class TimestampLabelGroup(LabelGroup):
         except json.JSONDecodeError:
             # Handle JSON parsing errors
             return False
-        tolerance = 1.5
+        tolerance = self.tolerance
         # Extract start and end values from both dictionaries
         start1 = dict1.get('start', 0)
         end1 = dict1.get('end', 0)
@@ -177,9 +180,10 @@ class TimestampLabelGroup(LabelGroup):
         return start_equal and end_equal
     
 class MultiImageLabelGroup(LabelGroup):
-    def __init__(self, image_id: str, labels: list[str]) -> None:
+    def __init__(self, image_id: str, labels: list[str], overlap_percentage: float = 0.6) -> None:
         self.image_id = image_id
         self.labels = labels.copy()
+        self.tolerance = overlap_percentage
 
     def add_label(self, label : str):
         self.labels.append(label)
@@ -210,7 +214,7 @@ class MultiImageLabelGroup(LabelGroup):
             # Create dictionaries to count rectangles by label
             label_count1 = {}
             label_count2 = {}
-            tolerance = 0.6
+            tolerance = self.tolerance
             for rect in rects1:
                 label = rect['label']
                 if label not in label_count1:
@@ -251,9 +255,10 @@ class MultiImageLabelGroup(LabelGroup):
             return False
 
 class MultiTimestampLabelGroup(LabelGroup):
-    def __init__(self, mediaId: str, labels: list[str]) -> None:
+    def __init__(self, mediaId: str, labels: list[str], start_end_tolerance: float = 1.5) -> None:
         self.mediaId = mediaId
         self.labels = labels.copy()
+        self.tolerance = start_end_tolerance
 
     def add_label(self, label : str):
         self.labels.append(label)
@@ -268,5 +273,47 @@ class MultiTimestampLabelGroup(LabelGroup):
         }
     
     def compare(self, data1, data2) -> bool:
+        try:
+            # Parse the JSON strings into lists of dictionaries
+            list1 : list = json.loads(data1)
+            list2 : list = json.loads(data2)
+        except json.JSONDecodeError:
+            # Handle JSON parsing errors
+            return False
         
-        return False
+        # Check if the lists have the same number of elements
+        if len(list1) != len(list2):
+            return False
+        
+        tolerance = self.tolerance
+
+        def compare_elements(elem1, elem2) -> bool:
+            """Compare two elements with tolerance for start/end and exact match for label."""
+            start1 = elem1.get('start', 0)
+            end1 = elem1.get('end', 0)
+            label1 = elem1.get('label', '')
+
+            start2 = elem2.get('start', 0)
+            end2 = elem2.get('end', 0)
+            label2 = elem2.get('label', '')
+
+            # Check if start and end are within tolerance and labels are equal
+            start_equal = abs(start1 - start2) <= tolerance
+            end_equal = abs(end1 - end2) <= tolerance
+            label_equal = label1 == label2
+
+            return start_equal and end_equal and label_equal
+        
+        # Ensure for each element in list1 there is a matching element in list2
+        matched = [False] * len(list2)  # Keep track of matched elements in list2
+        for elem1 in list1:
+            found_match = False
+            for i, elem2 in enumerate(list2):
+                if not matched[i] and compare_elements(elem1, elem2):
+                    matched[i] = True
+                    found_match = True
+                    break
+            if not found_match:
+                return False
+        
+        return True
