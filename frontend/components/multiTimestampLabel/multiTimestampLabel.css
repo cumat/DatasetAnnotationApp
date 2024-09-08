@@ -1,6 +1,7 @@
 .playback-bar {
     flex-grow: 1;
     height: 10px;
+    width: 100%;
     background-color: var(--background-color-hover);
     border-radius: 5px;
     cursor: pointer;
@@ -90,6 +91,12 @@
     align-items: center;
     margin: 10px;
     width: 100%;
+}
+
+@media (max-width: 768px) {
+    .label-timestamp-upper-container {
+        flex-direction: column;
+    }
 }
 
 .label-timestamp-upper-container>* {

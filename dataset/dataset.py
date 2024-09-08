@@ -1,4 +1,5 @@
 from dataset.labels import TextLabelGroup, NumberLabelGroup, ImageLabelGroup, TimestampLabelGroup, LabelGroup, NumberValueType, MultiImageLabelGroup, MultiTimestampLabelGroup
+
 class HtmlView:
     def __init__(self) -> None:
         self.content = ""
@@ -6,31 +7,50 @@ class HtmlView:
     def add_html(self, content):
         self.content += content
         return self
+    
     def add_style(self, res_source : str):
         self.content += f'<link rel="stylesheet" href="{res_source}">'
         return self
+    
     def add_text(self, text):
         self.content += f"<p>{text}</p>"
         return self
+    
     def add_img(self, source : str, id: str | None):
         if id:
             self.content += (f'<img id={id} src="{source}" width="500">')
         else:
             self.content += (f'<img src="{source}" width="500">')
         return self
-    def add_video(self, source: str, id: str | None):
+    
+    def add_video(self, source: str, type: str='video/mp4', id: str | None = None):
         id_str = ""
         if id:
             id_str= f"id={id}"
-        
+        # max video width = 1280px
         self.content += (f'''
-                            <div style="display: flex; width: 100%; justify-content: center;">
-                                <video {id_str} width="80%" preload="auto" controls>
-                                    <source src="{source}" type="video/mp4">
+                            <div style="display: flex; width: 100%; max-width:1408px; justify-content: center;">
+                                <video {id_str} width="90%" preload="auto" controls>
+                                    <source src="{source}" type="{type}">
                                     Your browser does not support the video tag.
                                 </video>
                             </div>''')
         return self
+    
+    def add_audio(self, source: str, type: str='video/mp4', id: str | None = None):
+        id_str = ""
+        if id:
+            id_str= f"id={id}"
+        # max video width = 1280px
+        self.content += (f'''
+                            <div style="display: flex; width: 100%; max-width:1408px; justify-content: center;">
+                                <audio {id_str} width="90%" preload="auto" controls>
+                                    <source src="{source}" type="{type}">
+                                    Your browser does not support the audio tag.
+                                </audio>
+                            </div>''')
+        return self
+    
     def add_external_html(self, source_path:str):
         try:
             with open(source_path, 'r') as file:
@@ -72,8 +92,10 @@ class Dataset:
 
     def get_dataset(self) -> list[Data]:
         return self.dataset_order
+    
     def get_data(self, index: int) -> Data:
         return self.dataset_order[index]
+    
     def get_data_by_id(self, id: str) -> Data:
         return self.dataset[id]
     

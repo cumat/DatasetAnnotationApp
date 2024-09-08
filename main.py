@@ -1,4 +1,3 @@
-from backend.app import App
 from dataset.dataset import Dataset
 
 import argparse
@@ -52,13 +51,21 @@ def main() :
     except:
         show_error_server("error importing plugin.py save_dataset\n check if the function is defined.\ndef save_dataset(results: DatasetResults) -> None")
         return
-
-    # get dataset
-    dataset = get_dataset()
-    # check dataset value
-    if not isinstance(dataset, Dataset):
-        show_error_server("error calling the get_dataset function\n the result is not a Dataset instance")
+    try:
+        # get dataset
+        dataset = get_dataset()
+        # check dataset value
+        if not isinstance(dataset, Dataset):
+            show_error_server("error calling the get_dataset function\n the result is not a Dataset instance")
+            return
+        if dataset.get_data_count() == 0:
+            show_error_server("error calling the get_dataset function\n the result Dataset has no data")
+            return
+    except:
+        show_error_server("error calling the get_dataset function\n check if the function is implemented correctly.\ndef save_dataset(results: DatasetResults) -> None")
         return
+    
+    from backend.app import App
     # initialize app
     app = App(__name__, './frontend', dataset)
     # import routes

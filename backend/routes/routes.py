@@ -19,12 +19,18 @@ def send_file(filepath):
 @bp.route('/')
 def main():
     return redirect('/home')
+
 @bp.route('/home')
 def home():
     return send_page('home.html')
+
 @bp.route('/login')
 def send_login_page():
     return send_page('login.html')
+
+@bp.errorhandler(404)
+def page_not_found(e):
+    return redirect('/')
 
 @bp.route("/review/", defaults={'user': None})
 @bp.route('/annotate/<user>')

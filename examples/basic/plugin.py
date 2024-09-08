@@ -1,4 +1,4 @@
-from dataset.dataset import Dataset, Data, HtmlView, TextLabelGroup, NumberLabelGroup, NumberValueType, ImageLabelGroup, TimestampLabelGroup
+from dataset.dataset import Dataset, Data, HtmlView, TextLabelGroup, NumberLabelGroup, NumberValueType, ImageLabelGroup, MultiImageLabelGroup, TimestampLabelGroup, MultiTimestampLabelGroup
 
 from dataset.dataset_results import DatasetResults, DatasetDataResult
 
@@ -53,14 +53,38 @@ def get_dataset() -> Dataset:
     # create an html view for the data
     view = HtmlView()
     # add the external html file containing the video with id="media-id"
-    view.add_external_html(f"assets/video-test.html")
+    # view.add_external_html(f"assets/video-test.html")
+    view.add_video("/res/assets/vid.mp4", id=media_id)
     view.add_text("An example data for timestamp labels")
     # create and add the data
     dataset.add_data(Data(id="5", title="timestamp label", view=view, labels=labels))
 
+    # choose an id for the image
+    img_id = "img-id"
+    # create an image label group
+    labels = MultiImageLabelGroup(img_id, ['label1', 'label2'])
+    # create an html view for the data
+    view = HtmlView()
+    # add an image and set its id with
+    view.add_img(f"/res/assets/road0.png", img_id)
+    view.add_text("An example data for multi image labels")
+    # create and add the data
+    dataset.add_data(Data(id="6", title="multi image label", view=view, labels=labels))
+
+    # choose an id for the video or audio
+    media_id = "media-id"
+    # create a timestamp label group
+    labels = MultiTimestampLabelGroup(media_id, ['label1', 'label2'])
+    # create an html view for the data
+    view = HtmlView()
+    # add the external html file containing the video with id="media-id"
+    view.add_audio("/res/assets/vid.mp4", id=media_id)
+    view.add_text("An example data for multi timestamp labels")
+    # create and add the data
+    dataset.add_data(Data(id="7", title="multi timestamp label", view=view, labels=labels))
+
     # return the dataset
     return dataset
-
 # save dataset implementation
 def save_dataset(results: DatasetResults) -> None:
     # save the results as a json with the helper function
