@@ -1,7 +1,6 @@
-import { clearChildren } from '../../src/common.js';
+import { clearChildren, createDomElement, importCss } from '../../src/common.js';
 import { Component } from '../component.js';
 const css = "/components/textLabels/textLabels.css";
-const html = "/components/textLabels/textLabels.html";
 
 export class TextLabel {
     constructor() {
@@ -40,12 +39,20 @@ export class TextLabel {
         return this.button;
     }
 }
-export class TextLabels extends Component {
+export class TextLabels extends HTMLElement {
     constructor() {
-        super(html, css);
+        super();
+        importCss(css);
+        this.setupHtml();
     }
-    setupHtml(node, attributes) {
-        this.container = node.querySelector(".text-labels-container");
+    connectedCallback() {
+        clearChildren(this);
+        this.appendChild(this.container);
+    }
+    setupHtml() {
+        this.container = createDomElement('div', {
+            classList: ['text-labels-container']
+        });
         window.addEventListener("resize", () => { this.#onResize() });
         this.#onResize();
     }
@@ -150,16 +157,12 @@ export class TextLabels extends Component {
     }
 
     setLabels(labelsData, answer, onSelectCallback) {
-        this.addOnLoadListener(() => {
-            this.setData(labelsData, answer);
-            this.setOnSelectCallback(onSelectCallback);
-        });
+        this.setData(labelsData, answer);
+        this.setOnSelectCallback(onSelectCallback);
     }
     setSelectedLabel(label) {
-        this.addOnLoadListener(() => {
-            this.currentAnswer = label;
-            this.#updateSelectedLabel(label);
-        });
+        this.currentAnswer = label;
+        this.#updateSelectedLabel(label);
     }
 }
 
