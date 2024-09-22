@@ -35,6 +35,10 @@ class LabelAnswerCompare:
         for answer in self.answers:
             found = False
             for c in counted_answers:
+                if answer == c["label"]:
+                    found = True
+                    c["count"] += 1
+                    break
                 if self.label_group.compare(answer, c["label"]):
                     # append to the "equal" label the other users
                     self.users[c["label"]].append(self.users[answer])

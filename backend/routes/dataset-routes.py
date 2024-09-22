@@ -167,12 +167,12 @@ def send_compare_results(id):
     users_answers = get_dataset_results('results/.', dataset.name)
     data = dataset.get_data_by_id(id)
     compare = LabelAnswerCompare(len(users_answers), data.labels)
-        
     for ua in users_answers:
         for answer in ua.answers:
             if answer.id == str(id):
                 compare.add_answer(answer.label, ua.user)
-                break        
+                break
+            
     return {
         "dataset" : dataset.name,
         "id" : data.id,

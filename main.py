@@ -48,8 +48,8 @@ def main() :
         # check if it takes only one param
         if len(sig.parameters) != 1:
             raise Exception()
-    except:
-        show_error_server("error importing plugin.py save_dataset\n check if the function is defined.\ndef save_dataset(results: DatasetResults) -> None")
+    except Exception as e:
+        show_error_server(f"error importing plugin.py save_dataset\n check if the function is defined.\ndef save_dataset(results: DatasetResults) -> None\n{{{e}}}")
         return
     try:
         # get dataset
@@ -61,8 +61,8 @@ def main() :
         if dataset.get_data_count() == 0:
             show_error_server("error calling the get_dataset function\n the result Dataset has no data")
             return
-    except:
-        show_error_server("error calling the get_dataset function\n check if the function is implemented correctly.\ndef save_dataset(results: DatasetResults) -> None")
+    except Exception as e:
+        show_error_server(f'error calling the get_dataset function\n {{{e}}}')
         return
     
     from backend.app import App

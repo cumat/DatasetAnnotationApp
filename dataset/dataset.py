@@ -16,11 +16,11 @@ class HtmlView:
         self.content += f"<p>{text}</p>"
         return self
     
-    def add_img(self, source : str, id: str | None):
+    def add_img(self, source : str, id: str | None, width: int = 500):
         if id:
-            self.content += (f'<img id={id} src="{source}" width="500">')
+            self.content += (f'<img id={id} src="{source}" width="{width}">')
         else:
-            self.content += (f'<img src="{source}" width="500">')
+            self.content += (f'<img src="{source}" width="{width}">')
         return self
     
     def add_video(self, source: str, type: str='video/mp4', id: str | None = None):
