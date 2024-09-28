@@ -38,8 +38,8 @@ def show_error_server(message):
 def main() :
     try:
         from plugin import get_dataset
-    except:
-        show_error_server("error importing plugin.py get_dataset\n check if the function is defined.\ndef get_dataset() -> Dataset")
+    except Exception as e:
+        show_error_server(f"error importing plugin.py get_dataset\n check if the function is defined.\ndef get_dataset() -> Dataset\n{{{e}}}")
         return
     try:
         import inspect

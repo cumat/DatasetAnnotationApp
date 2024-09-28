@@ -33,6 +33,12 @@ while maintaining the body background color.
     /* Allow scrolling within this div */
 }
 
+#content-container {
+    height: 100%;
+}
+
 #data-content {
     max-width: 1280px;
+    width: 80%;
+    height: 100%;
 }
