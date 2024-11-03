@@ -104,7 +104,35 @@ dataset.add_data(Data(id="5", title="timestamp label", view=view, labels=labels)
 ```
 - The data is given an `id` of `"5"`, a `title` of `"timestamp label"`, and added to the dataset.
 
-### 1.7. Return the Dataset
+### 1.7. Add Multi-Image Labels
+
+```python
+img_id = "img-id"
+labels = MultiImageLabelGroup(img_id, ['label1', 'label2'])
+view = HtmlView()
+view.add_img(f"/res/assets/road0.png", img_id)
+view.add_text("An example data for multi-image labels")
+dataset.add_data(Data(id="6", title="multi image label", view=view, labels=labels))
+```
+
+- A `MultiImageLabelGroup` is created, allowing multiple labels for an image.
+- The data is given an `id` of `"6"`, a `title` of `"multi image label"`, and added to the dataset.
+
+### 1.8. Add Multi-Timestamp Labels
+
+```python
+media_id = "media-id"
+labels = MultiTimestampLabelGroup(media_id, ['label1', 'label2'])
+view = HtmlView()
+view.add_audio("/res/assets/vid.mp4", id=media_id)
+view.add_text("An example data for multi-timestamp labels")
+dataset.add_data(Data(id="7", title="multi timestamp label", view=view, labels=labels))
+```
+
+- A `MultiTimestampLabelGroup` object is created to manage multiple timestamps for a media file, with multiple labels.
+- The data is given an `id` of `"7"`, a `title` of `"multi timestamp label"`, and added to the dataset.
+
+### 1.9. Return the Dataset
 
 ```python
 return dataset

@@ -1,0 +1,13 @@
+@Override
+    public <S, T> T deserialize(SerializedObject<S> serializedObject) {
+        try {
+            if (JsonNode.class.equals(serializedObject.getContentType())) {
+                return getReader(classForType(serializedObject.getType()))
+                        .readValue((JsonNode) serializedObject.getData());
+            }
+            SerializedObject<byte[]> byteSerialized = converter.convert(serializedObject, byte[].class);
+            return getReader(classForType(serializedObject.getType())).readValue(byteSerialized.getData());
+        } catch (IOException e) {
+            throw new SerializationException("Error while deserializing object", e);
+        }
+    }

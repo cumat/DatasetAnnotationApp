@@ -1,0 +1,37 @@
+/**
+     * Process a batch of events. The messages are processed in a new {@link UnitOfWork}. Before each message is handled
+     * the event processor creates an interceptor chain containing all registered {@link MessageHandlerInterceptor
+     * interceptors}.
+     *
+     * @param eventMessages The batch of messages that is to be processed
+     * @param unitOfWork    The Unit of Work that has been prepared to process the messages
+     * @param segment       The segment for which the events should be processed
+     * @throws Exception when an exception occurred during processing of the batch
+     */
+    protected void processInUnitOfWork(List<? extends EventMessage<?>> eventMessages,
+                                       UnitOfWork<? extends EventMessage<?>> unitOfWork,
+                                       Segment segment) throws Exception {
+        try {
+            unitOfWork.executeWithResult(() -> {
+                MessageMonitor.MonitorCallback monitorCallback =
+                        messageMonitor.onMessageIngested(unitOfWork.getMessage());
+                return new DefaultInterceptorChain<>(unitOfWork, interceptors, m -> {
+                    try {
+                        eventHandlerInvoker.handle(m, segment);
+                        monitorCallback.reportSuccess();
+                        return null;
+                    } catch (Throwable throwable) {
+                        monitorCallback.reportFailure(throwable);
+                        throw throwable;
+                    }
+                }).proceed();
+            }, rollbackConfiguration);
+        } catch (Exception e) {
+            if (unitOfWork.isRolledBack()) {
+                errorHandler.handleError(new ErrorContext(getName(), e, eventMessages));
+            } else {
+                logger.info("Exception occurred while processing a message, but unit of work was committed. {}",
+                            e.getClass().getName());
+            }
+        }
+    }

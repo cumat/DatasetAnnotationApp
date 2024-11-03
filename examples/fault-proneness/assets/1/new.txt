@@ -1,0 +1,15 @@
+@ConditionalOnMissingBean
+    @Bean(initMethod = "start", destroyMethod = "shutDown")
+    @ConditionalOnBean({ProducerFactory.class, KafkaMessageConverter.class})
+    public KafkaPublisher<String, byte[]> kafkaPublisher(ProducerFactory<String, byte[]> kafkaProducerFactory,
+                                                         EventBus eventBus,
+                                                         KafkaMessageConverter<String, byte[]> kafkaMessageConverter,
+                                                         AxonConfiguration configuration) {
+        return KafkaPublisher.<String, byte[]>builder()
+                .messageSource(eventBus)
+                .producerFactory(kafkaProducerFactory)
+                .messageConverter(kafkaMessageConverter)
+                .messageMonitor(configuration.messageMonitor(KafkaPublisher.class, "kafkaPublisher"))
+                .topic(properties.getDefaultTopic())
+                .build();
+    }

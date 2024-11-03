@@ -1,0 +1,55 @@
+@Override
+    public <Q, R> CompletableFuture<QueryResponseMessage<R>> query(QueryMessage<Q, R> queryMessage) {
+        QueryMessage<Q, R> interceptedQuery = dispatchInterceptors.intercept(queryMessage);
+        CompletableFuture<QueryResponseMessage<R>> completableFuture = new CompletableFuture<>();
+        try {
+            queryServiceStub()
+                    .query(serializer.serializeRequest(interceptedQuery,
+                                                       1,
+                                                       TimeUnit.HOURS.toMillis(1),
+                                                       priorityCalculator.determinePriority(interceptedQuery)),
+                           new StreamObserver<QueryResponse>() {
+                               @Override
+                               public void onNext(QueryResponse queryResponse) {
+                                   logger.debug("Received response: {}", queryResponse);
+                                   if (queryResponse.hasErrorMessage()) {
+                                       completableFuture.completeExceptionally(
+                                               new RemoteQueryHandlingException(queryResponse.getErrorCode(),
+                                                                                queryResponse.getErrorMessage()));
+                                   } else {
+                                       completableFuture.complete(serializer.deserializeResponse(queryResponse));
+                                   }
+                               }
+
+                               @Override
+                               public void onError(Throwable throwable) {
+                                   logger.warn("Received error while waiting for first response: {}",
+                                               throwable.getMessage(),
+                                               throwable);
+                                   completableFuture.completeExceptionally(new AxonServerQueryDispatchException(
+                                           ErrorCode.QUERY_DISPATCH_ERROR.errorCode(),
+                                           ExceptionSerializer.serialize(configuration.getClientId(), throwable)
+                                   ));
+                               }
+
+                               @Override
+                               public void onCompleted() {
+                                   if (!completableFuture.isDone()) {
+                                       completableFuture.completeExceptionally(new AxonServerQueryDispatchException(
+                                               ErrorCode.QUERY_DISPATCH_ERROR.errorCode(),
+                                               ErrorMessage.newBuilder()
+                                                           .setMessage("No result from query executor")
+                                                           .build()
+                                       ));
+                                   }
+                               }
+                           });
+        } catch (Exception e) {
+            logger.warn("There was a problem issuing a query {}.", interceptedQuery, e);
+            ErrorMessage errorMessage = ExceptionSerializer.serialize(configuration.getClientId(), e);
+            completableFuture.completeExceptionally(
+                    new AxonServerQueryDispatchException(ErrorCode.QUERY_DISPATCH_ERROR.errorCode(), errorMessage)
+            );
+        }
+        return completableFuture;
+    }

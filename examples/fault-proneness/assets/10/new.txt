@@ -1,0 +1,10 @@
+/**
+     * 重新设置SqlSource
+     *
+     * @param ms
+     * @param sqlSource
+     */
+    protected void setSqlSource(MappedStatement ms, SqlSource sqlSource) {
+        MetaObject msObject = MetaObjectUtil.forObject(ms);
+        msObject.setValue("sqlSource", sqlSource);
+    }

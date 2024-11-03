@@ -1,0 +1,31 @@
+/**
+     * 处理 KeySql 注解
+     *
+     * @param entityTable
+     * @param entityColumn
+     * @param keySql
+     */
+    protected void processKeySql(EntityTable entityTable, EntityColumn entityColumn, KeySql keySql) {
+        if (keySql.useGeneratedKeys()) {
+            entityColumn.setIdentity(true);
+            entityColumn.setGenerator("JDBC");
+            entityTable.setKeyProperties(entityColumn.getProperty());
+            entityTable.setKeyColumns(entityColumn.getColumn());
+        } else if (keySql.dialect() == IdentityDialect.DEFAULT) {
+            entityColumn.setIdentity(true);
+            entityColumn.setOrder(ORDER.AFTER);
+        }  else if (keySql.dialect() != IdentityDialect.NULL) {
+            //自动增长
+            entityColumn.setIdentity(true);
+            entityColumn.setOrder(ORDER.AFTER);
+            entityColumn.setGenerator(keySql.dialect().getIdentityRetrievalStatement());
+        } else {
+            if (StringUtil.isEmpty(keySql.sql())) {
+                throw new MapperException(entityTable.getEntityClass().getCanonicalName()
+                        + " 类中的 @KeySql 注解配置无效!");
+            }
+            entityColumn.setIdentity(true);
+            entityColumn.setOrder(keySql.order());
+            entityColumn.setGenerator(keySql.sql());
+        }
+    }

@@ -1,0 +1,7 @@
+public DefaultMongoTemplate withTrackingTokenCollection(String trackingTokensCollectionName) {
+        return new DefaultMongoTemplate(database(),
+                                        domainEventsCollectionName,
+                                        snapshotEventsCollectionName,
+                                        sagasCollectionName,
+                                        trackingTokensCollectionName);
+    }

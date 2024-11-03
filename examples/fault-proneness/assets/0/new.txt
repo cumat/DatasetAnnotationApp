@@ -1,0 +1,9 @@
+public DefaultMongoTemplate withTrackingTokenCollection(String trackingTokensCollectionName) {
+        return DefaultMongoTemplate.builder()
+                                   .mongoDatabase(database())
+                                   .domainEventsCollectionName(domainEventsCollectionName)
+                                   .snapshotEventsCollectionName(snapshotEventsCollectionName)
+                                   .sagasCollectionName(sagasCollectionName)
+                                   .trackingTokensCollectionName(trackingTokensCollectionName)
+                                   .build();
+    }

@@ -1,0 +1,4 @@
+private Channel getChannelToEventStore() {
+        if (shutdown) return null;
+        return platformConnectionManager.getChannel();
+    }
