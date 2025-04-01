@@ -28,8 +28,8 @@ Before you begin, ensure you have the following installed:
  - Clone the Repository
 
 ```bash
-git clone https://github.com/UmbertoEco12/tirocinio.git
-cd tirocinio
+git clone https://github.com/cumat/DatasetAnnotationApp.git
+cd DatasetAnnotationApp
 ```
  - Install Dependencies
 
